@@ -13,7 +13,7 @@ import {NavigationProvider} from "./context/NavigationProvider.tsx";
 import ChatDetail from "./pages/chat/ChatDetail.tsx";
 import MissionDetail from "./pages/mission/MissionDetail.tsx";
 import AllMission from "./pages/mission/AllMission.tsx";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import SplashScreen from "./pages/SplashScreen.tsx";
 import OnboardingSlider from "./pages/OnBoardingSlider.tsx";
 import Login from "./pages/connection/Login.tsx";
@@ -27,31 +27,26 @@ export default function AppRouter() {
 
     const [showSplash, setShowSplash] = useState(true);
     const [showOnboarding, setShowOnboarding] = useState(false);
-    const [isReady, setIsReady] = useState(false);
-
-    useEffect(() => {
-        localStorage.setItem('hasSeenOnboarding', 'false');
-        const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding') === 'true';
-        if (showSplash) {
-            return;
-        }
-
-        if (!hasSeenOnboarding && !isReady) {
-            setShowOnboarding(true);
-        } else if (!isReady) {
-            setIsReady(true);
-            navigate('/');
-        }
-    }, [showSplash, isReady, navigate]);
 
     const handleSplashComplete = () => {
+        const hasToken = localStorage.getItem('hasToken');
+        const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding') === 'true';
+
         setShowSplash(false);
+
+        if (hasToken) {
+            setShowOnboarding(false);
+            navigate('/');
+        } else if (!hasSeenOnboarding) {
+            setShowOnboarding(true);
+        } else {
+            navigate('/login');
+        }
     };
 
     const handleOnboardingComplete = () => {
-        localStorage.setItem('hasSeenOnboarding', 'false');
+        localStorage.setItem('hasSeenOnboarding', 'true');
         setShowOnboarding(false);
-        setIsReady(true);
         navigate('/login');
     };
 

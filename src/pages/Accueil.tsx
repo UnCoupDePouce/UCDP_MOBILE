@@ -2,6 +2,7 @@ import { HomeHeader } from "../components/navigation/HomeHeader.tsx";
 import { useNavigate } from "react-router";
 import ProjectCard from "../components/cards/ProjectCard.tsx";
 import { NavLink } from "react-router";
+import Message from "../components/Message.tsx";
 
 const MISSIONS = [
     {
@@ -37,12 +38,11 @@ export default function Accueil() {
     const navigate = useNavigate();
 
     return (
-        // Changement : bg-white -> dark:bg-neutral-950
         <main className="px-6 pb-28 min-h-screen bg-white dark:bg-neutral-950 transition-colors duration-300">
             <HomeHeader />
+            <Message data=""/>
 
             <div className="flex flex-col gap-y-4">
-                {/* Changement : text-gray-400 -> dark:text-neutral-600 */}
                 <div className="flex justify-between">
                     <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-neutral-600 mb-1 ml-1">
                         Missions à proximité
