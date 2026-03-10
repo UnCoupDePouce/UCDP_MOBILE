@@ -12,7 +12,7 @@ export function HomeHeader() {
                     to="/shop"
                     className="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-2xl text-[11px] font-black flex items-center gap-2 active:scale-95 transition-all shadow-lg shadow-black/10 dark:shadow-white/5 border border-transparent dark:border-white/10"
                 >
-                    <span>10.00 €</span>
+                    <span>150</span>
                     <IonIcon name="wallet-outline" className="text-sm opacity-60"/>
                 </NavLink>
 

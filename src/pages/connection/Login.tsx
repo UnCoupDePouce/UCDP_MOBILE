@@ -1,28 +1,55 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import {useState} from "react";
+import {Link, useNavigate} from "react-router";
 import IonIcon from "@reacticons/ionicons";
+import Message from "../../components/Message.tsx";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [message, setMessage] = useState<{ status: number, message: string } | null>(null);
 
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
+        setMessage(null);
 
-        // Simulation de connexion
-        setTimeout(() => {
+        try {
+            const response = await fetch("/api/user/login", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({email: email, password: password}),
+            });
+
+            const data = await response.json();
+            console.log("Réponse API :", data);
+
+            if (!response.ok) {
+                setMessage({
+                    status: response.status,
+                    message: data.errors?.[0]?.message || "Erreur lors de la connexion"
+                });
+            } else {
+                setMessage({status: 200, message: "Connexion réussie 🎉"});
+                localStorage.setItem("hasToken", data.token);
+                navigate("/"); // redirection
+            }
+        } catch (error) {
+            console.error(error);
+            setMessage({status: 500, message: "Erreur serveur"});
+        } finally {
             setIsLoading(false);
-            navigate("/");
-        }, 1500);
+        }
     };
 
     return (
-        <div className="fixed inset-0 bg-white dark:bg-neutral-950 flex flex-col px-8 pb-8 pt-12 overflow-y-auto transition-colors duration-300">
+        <div
+            className="fixed inset-0 bg-white dark:bg-neutral-950 flex flex-col px-8 pb-8 pt-12 overflow-y-auto transition-colors duration-300">
+
+            {message && <Message data={message}/>}
 
             <div className="mb-10">
                 <h2 className="text-4xl font-black tracking-tighter uppercase leading-none text-black dark:text-white">
@@ -72,7 +99,8 @@ export default function Login() {
                 </div>
 
                 <div className="text-right">
-                    <button type="button" className="text-xs font-bold uppercase tracking-widest text-gray-400 active:text-black transition-colors">
+                    <button type="button"
+                            className="text-xs font-bold uppercase tracking-widest text-gray-400 active:text-black transition-colors">
                         Oublié ?
                     </button>
                 </div>

@@ -4,14 +4,13 @@ import './index.css'
 import AddMission from "./pages/mission/AddMission.tsx";
 import Accueil from "./pages/Accueil.tsx";
 import Profile from "./pages/Profile.tsx";
-import Mission from "./pages/mission/Mission.tsx";
 import {NavBar} from "./components/navigation/NavBar.tsx";
 import Notification from "./pages/Notification.tsx";
 import {excludedRoutes} from "./data/excludedRoutes.ts";
 import {NavigationProvider} from "./context/NavigationProvider.tsx";
 import ChatDetail from "./pages/chat/ChatDetail.tsx";
 import MissionDetail from "./pages/mission/MissionDetail.tsx";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import SplashScreen from "./pages/SplashScreen.tsx";
 import OnboardingSlider from "./pages/OnBoardingSlider.tsx";
 import Login from "./pages/connection/Login.tsx";
@@ -20,6 +19,7 @@ import Shop from "./pages/Shop.tsx";
 import {ThemeProvider} from "./context/ThemeProvider.tsx";
 import ChatIndex from "./pages/chat/ChatIndex.tsx";
 import Layout from "./pages/chat/Layout.tsx";
+import AllMission from "./pages/mission/AllMission.tsx";
 
 export default function AppRouter() {
     const location = useLocation();
@@ -27,33 +27,26 @@ export default function AppRouter() {
 
     const [showSplash, setShowSplash] = useState(true);
     const [showOnboarding, setShowOnboarding] = useState(false);
-    const [isReady, setIsReady] = useState(false);
-
-    useEffect(() => {
-        localStorage.setItem('hasSeenOnboarding', 'true');
-        const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding') === 'true';
-        if (showSplash) {
-            return;
-        }
-
-        if (!hasSeenOnboarding && !isReady) {
-            setShowOnboarding(true);
-        } else if (!isReady) {
-            setIsReady(true);
-            navigate('/');
-        }
-    }, [showSplash, isReady, navigate]);
 
     const handleSplashComplete = () => {
-        setTimeout(() => {
-            setShowSplash(false);
-        }, 1000);
+        const hasToken = localStorage.getItem('hasToken');
+        const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding') === 'true';
+
+        setShowSplash(false);
+
+        if (hasToken) {
+            setShowOnboarding(false);
+            navigate('/');
+        } else if (!hasSeenOnboarding) {
+            setShowOnboarding(true);
+        } else {
+            navigate('/login');
+        }
     };
 
     const handleOnboardingComplete = () => {
-        localStorage.setItem('hasSeenOnboarding', 'false');
+        localStorage.setItem('hasSeenOnboarding', 'true');
         setShowOnboarding(false);
-        setIsReady(true);
         navigate('/login');
     };
 
@@ -86,7 +79,7 @@ export default function AppRouter() {
                     <Route path="user" element={<Profile/>}/>
                     <Route path="login" element={<Login/>}/>
                     <Route path="register" element={<Register/>}/>
-                    <Route path="mission" element={<Mission/>}/>
+                    <Route path="mission" element={<AllMission/>}/>
                     <Route path="mission/:id" element={<MissionDetail/>}/>
                     <Route path="new/mission" element={<AddMission/>}/>
                     <Route path="notification" element={<Notification/>}/>

@@ -8,7 +8,7 @@ const MOCK_PROS = [
     { id: 4, name: "Marc Plomberie", job: "Plombier Chauffagiste", rating: "4.8", price: "380€", img: "https://i.pravatar.cc/150?u=4" },
 ];
 
-export default function Mission() {
+export default function MyMission() {
     const [selectedMission, setSelectedMission] = useState<string | null>(null);
 
     return (
