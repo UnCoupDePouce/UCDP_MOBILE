@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { Header } from "../components/navigation/Header.tsx";
 import IonIcon from "@reacticons/ionicons";
-import { useTheme } from "../context/ThemeProvider.tsx";
+import { useTheme } from "../providers/ThemeProvider.tsx";
 
 export default function Profile() {
     const [isProMode, setIsProMode] = useState(false);

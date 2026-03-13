@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router";
-import { useNavigationStack } from "../../context/NavigationProvider.tsx";
+import { useNavigationStack } from "../../providers/NavigationProvider.tsx";
 import IonIcon from "@reacticons/ionicons";
 import { useEffect, useState } from "react";
 import { mainRoutes } from "../../data/navigationStack.ts";
