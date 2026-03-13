@@ -18,6 +18,7 @@ jobs:
           git config user.email "actions@github.com"
       - name: Add org remote
         run: |
+          git config --unset-all http.https://github.com/.extraheader
           git remote add org https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/UnCoupDePouce/UCDP_MOBILE.git
    
       - name: Checkout 26000.0
