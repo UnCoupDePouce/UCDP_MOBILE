@@ -10,7 +10,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 24.x
       - name: Install dependencies
         run: npm install
       - name: Build app
@@ -23,7 +23,7 @@ jobs:
          distribution: 'temurin'
          java-version: '21'
       - name: Make gradlew executable
-        run : chmod +x android/gradlew
+        run: chmod +x android/gradlew
       - name: Build Android bundle
         run: cd android && ./gradlew assembleDebug
       - name: Upload artifact
