@@ -1,0 +1,24 @@
+name: Build Android
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19.x
+      - name: Install dependencies
+        run: npm install
+      - name: Build app
+        run: npm run build
+      - name: Copy to Capacitor
+        run: npx cap copy android
+      - name: Build Android bundle
+        run: cd android && ./gradlew assembleDebug
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: android/app/build/outputs/apk/debug/app-debug.apk   
