@@ -1,6 +1,4 @@
-// src/data/navigationStack.ts
-
-export const mainRoutes = ["/", "/mission", "/message", "/user"];
+export const mainRoutes = ["/", "/mission", "/message", "/user", "/new/mission"];
 
 export type NavStackItem = {
     path: string;
@@ -19,11 +17,11 @@ export class NavigationStack {
         }
     }
 
-    getPreviousPath(): string | null {
-        if (this.stack.length > 1) {
+    getPreviousPath(): string {
+        if (this.stack.length >= 2) {
             return this.stack[this.stack.length - 2].path;
         }
-        return null;
+        return "/";
     }
 
     pop() {

@@ -1,9 +1,7 @@
-import { Home, User, BadgePlus, Clipboard, MessageCircle } from "lucide-react";
-
 export const menuItems = [
-    { name: "Accueil", to: "/", icon: Home },
-    { name: "Messages", to: "/message", icon: MessageCircle },
-    { name: "Ajouter une mission", to: "new/mission", icon: BadgePlus },
-    { name: "Missions", to: "/mission", icon: Clipboard },
-    { name: "Profil", to: "/user", icon: User },
-];
+    { name: "Accueil", to: "/", icon: "home" },
+    { name: "Messages", to: "/message", icon: "chatbubble-ellipses" },
+    { name: "Créer", to: "/new/mission", icon: "add-circle" },
+    { name: "Missions", to: "/mission", icon: "clipboard" },
+    { name: "Profil", to: "/user", icon: "person" },
+] as const;

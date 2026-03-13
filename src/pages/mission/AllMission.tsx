@@ -1,7 +1,7 @@
-import { HomeHeader } from "../components/navigation/HomeHeader.tsx";
-import SelectedCategory from "../components/SelectedCategory.tsx";
+import SelectedCategory from "../../components/SelectedCategory";
+import { Header } from "../../components/navigation/Header";
+import ProjectCard from "../../components/cards/ProjectCard";
 import { useNavigate } from "react-router";
-import ProjectCard from "../components/cards/ProjectCard.tsx";
 
 const MISSIONS = [
     {
@@ -33,30 +33,18 @@ const MISSIONS = [
     },
 ];
 
-export default function Accueil() {
+export default function AllMission() {
     const navigate = useNavigate();
 
     return (
-        <main className="min-h-screen bg-white dark:bg-neutral-950 transition-colors duration-300">
-            {/* Conteneur pour limiter la largeur sur Web et centrer le contenu */}
-            <div className="max-w-7xl mx-auto px-6 pb-28">
-
-                {/* Header adaptable : On peut imaginer qu'il prend plus de place sur desktop */}
-                <div className="py-4 md:py-8">
-                    <HomeHeader />
-                </div>
-
-                {/* Catégories : On peut les laisser en scroll horizontal (mobile) ou les étaler sur desktop */}
-                <div className="mb-10">
+        <div className="min-h-screen bg-white dark:bg-neutral-950 transition-colors duration-300">
+            <div className="mb-10">
+                <Header title="Toutes les missions" />
+                <main className="px-6 pt-2 pb-32">
+                    {/* TODO: Mettre une barre de recherche ou d'autre options pour faciliter la navigation entre les cards */}
                     <SelectedCategory />
-                </div>
-
-                <div className="flex flex-col gap-y-4">
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-neutral-600 mb-1 ml-1">
-                        Missions à proximité
-                    </h2>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {/* TODO: Revoir l'affichage des cards, trop grande ? */}
+                    <div className="flex flex-col gap-y-4">
                         {MISSIONS.map((mission) => (
                             <ProjectCard
                                 key={mission.id}
@@ -70,8 +58,9 @@ export default function Accueil() {
                             />
                         ))}
                     </div>
-                </div>
+                </main>
+                {/* TODO: Ajouter une pagination, faciliter l'expérience utilisateur */}
             </div>
-        </main>
-    );
+        </div>
+    )
 }
