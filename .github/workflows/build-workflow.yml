@@ -17,14 +17,14 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
       - name: Add org remote
-        run: git remote add org https://github.com/UnCoupDePouce/UCDP_MOBILE
-      - name: Push to org
-        env:
-          ORG_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
-          git fetch org
-          git checkout 26000.0
-          git push org 26000.0 --force
+          git remote add org https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/UnCoupDePouce/UCDP_MOBILE.git
+   
+      - name: Checkout 26000.0
+        run: git checkout 26000.0
+      
+      - name: Push to org main
+        run: git push org 26000.0:main --force
 
 
   quality:
