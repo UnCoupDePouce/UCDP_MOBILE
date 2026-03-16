@@ -38,7 +38,8 @@ export default function Login() {
       } else {
         setMessage({ status: 200, message: "Connexion réussie 🎉" });
         localStorage.setItem("hasToken", data.token);
-        localStorage.setItem("user_id", data.user.id);
+        localStorage.setItem("user_id", data.user.id_utilisateur);
+        localStorage.setItem("status", data.user.role);
         navigate("/");
       }
     } catch (error) {

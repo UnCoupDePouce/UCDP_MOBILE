@@ -1,10 +1,11 @@
-import { useState, useCallback } from "react";
+import {useState, useCallback, useEffect} from "react";
 import { Header } from "../components/navigation/Header.tsx";
 import { useTheme } from "../providers/ThemeProvider.tsx";
 import { useFetch } from "../hooks/useFetch.tsx";
 import { userService } from "../services/userService.ts";
 import { useMemo } from "react";
 import IonIcon from "@reacticons/ionicons";
+import { Role } from "../types/user";
 
 export default function Profile() {
   const [isProMode, setIsProMode] = useState(false);
@@ -16,6 +17,9 @@ export default function Profile() {
 
   const isDark = theme === "dark";
   const id_user = localStorage.getItem("user_id");
+  const role = localStorage.getItem("status");
+  const isAdmin = role === Role.ADMIN;
+  const isPrestataire = role === Role.PRESTATAIRE;
 
   const { data: user, loading, error } = useFetch(
       () => userService.getById(id_user || ""),
@@ -35,17 +39,21 @@ export default function Profile() {
   }, [user]);
 
   const handleLogout = () => {
-    if (window.confirm("Voulez-vous vraiment vous déconnecter ?")) {
       userService.logout();
-    }
   };
+
+  useEffect(() => {
+    if (isPrestataire && !isAdmin) {
+      setIsProMode(true);
+    }
+  }, [isPrestataire, isAdmin]);
 
   if (loading) {
     return (
-        <div className="min-h-screen bg-white dark:bg-neutral-950 flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="size-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Synchronisation...</p>
+        <div className="min-h-screen bg-neutral-50 dark:bg-black flex items-center justify-center">
+          <div className="relative size-16">
+            <div className="absolute inset-0 border-2 border-indigo-500/20 rounded-full"></div>
+            <div className="absolute inset-0 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </div>
     );
@@ -53,8 +61,14 @@ export default function Profile() {
 
   if (error || !id_user) {
     return (
-        <div className="min-h-screen flex items-center justify-center dark:bg-neutral-950">
-          <p className="text-red-500 font-bold uppercase tracking-tighter">Erreur de connexion au profil</p>
+        <div className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-black p-10 text-center">
+          <div className="space-y-4">
+            <IonIcon name="alert-circle-outline" className="text-5xl text-red-500" />
+            <p className="text-sm font-black uppercase tracking-tighter text-neutral-800 dark:text-neutral-200">
+              Session expirée ou introuvable
+            </p>
+            <button onClick={() => window.location.href = '/login'} className="text-[10px] font-bold uppercase tracking-widest text-indigo-500">Retour au login</button>
+          </div>
         </div>
     );
   }
@@ -72,15 +86,17 @@ export default function Profile() {
             </button>
           </div>
 
-          <div className="mb-10 bg-gray-50 dark:bg-neutral-900 border border-gray-100 dark:border-neutral-800 p-1.5 rounded-[24px] flex items-center relative h-14">
-            <div className={`absolute h-[44px] w-[calc(50%-6px)] bg-black dark:bg-white rounded-[18px] transition-transform duration-300 ease-out ${isProMode ? "translate-x-[calc(100%+0px)]" : "translate-x-0"}`} />
-            <button onClick={() => setIsProMode(false)} className={`flex-1 relative z-10 text-[10px] font-black uppercase tracking-widest transition-colors ${!isProMode ? "text-white dark:text-black" : "text-gray-400 dark:text-neutral-500"}`}>
-              Mode Client
-            </button>
-            <button onClick={() => setIsProMode(true)} className={`flex-1 relative z-10 text-[10px] font-black uppercase tracking-widest transition-colors ${isProMode ? "text-white dark:text-black" : "text-gray-400 dark:text-neutral-500"}`}>
-              Mode Pro
-            </button>
-          </div>
+          {isAdmin && (
+              <div className="mb-10 bg-gray-100 dark:bg-neutral-900 p-1.5 rounded-[24px] flex items-center relative h-14 border border-neutral-200 dark:border-neutral-800">
+                <div className={`absolute h-[44px] w-[calc(50%-6px)] bg-black dark:bg-white rounded-[18px] transition-transform duration-300 ease-out ${isProMode ? "translate-x-[calc(100%+0px)]" : "translate-x-0"}`} />
+                <button onClick={() => setIsProMode(false)} className={`flex-1 relative z-10 text-[10px] font-black uppercase tracking-widest transition-colors ${!isProMode ? "text-white dark:text-black" : "text-gray-400"}`}>
+                  Vue Client
+                </button>
+                <button onClick={() => setIsProMode(true)} className={`flex-1 relative z-10 text-[10px] font-black uppercase tracking-widest transition-colors ${isProMode ? "text-white dark:text-black" : "text-gray-400"}`}>
+                  Vue Pro
+                </button>
+              </div>
+          )}
 
           <div className="flex flex-col items-center mb-10">
             <div className="relative">
