@@ -34,27 +34,10 @@ export const userService = {
         }
     },
 
-    logout: async (
-        credentials: LoginCredentials
-    ): Promise<AuthResponse> => {
-        try {
-            const response = await fetch("/local/api/user/logout", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(credentials),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || "Identifiants invalides");
-            }
-
-            return data;
-        } catch (err: any) {
-            console.error("Erreur dans userService.login:", err);
-            throw new Error(err.message || "Erreur serveur");
-        }
+    logout: () => {
+        localStorage.removeItem("hasToken");
+        localStorage.removeItem("user_id");
+        window.location.href = "/login";
     },
 
     register: async (formData: any, userType: string): Promise<AuthResponse> => {
@@ -70,6 +53,7 @@ export const userService = {
         }
         return response.json();
     },
+    
     getById: async (id: string): Promise<User> => {
         const response = await fetch(`/local/api/user/${id}`, {
             method: "GET",

@@ -21,7 +21,7 @@ export default function Login() {
     setMessage(null);
 
     try {
-      const response = await fetch("/local/user/login", {
+      const response = await fetch("/local/api/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email, password: password }),
