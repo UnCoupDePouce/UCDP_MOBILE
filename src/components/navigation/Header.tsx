@@ -7,9 +7,11 @@ import { mainRoutes } from "../../data/navigationStack.ts";
 export function Header({
   title,
   showButton,
+  className,
 }: {
   title: string;
   showButton?: boolean;
+  className?: string;
 }) {
   const navStack = useNavigationStack();
   const location = useLocation();
@@ -31,7 +33,7 @@ export function Header({
               isSticky
                 ? "bg-white/80 dark:bg-[#0A0A0A]/80 backdrop-blur-md border-gray-100 dark:border-white/5 pt-12 pb-4"
                 : "bg-white dark:bg-[#0A0A0A] border-transparent pt-12 pb-6"
-            }`}
+            } ${className ?? ""}`}
     >
       <div className="flex items-center gap-4">
         {showBackButton && (

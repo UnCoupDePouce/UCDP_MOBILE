@@ -1,69 +1,73 @@
 import { useParams, useNavigate } from "react-router";
 import { useEffect, useState, useRef } from "react";
 import IonIcon from "@reacticons/ionicons";
+import { getSocket } from "../../services/socketService";
+
+interface Message {
+  corps: string;
+  id_expediteur: string;
+  id_destinataire: string;
+  lu?: boolean;
+}
 
 export default function ChatDetail() {
   const [inputText, setInputText] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Bonjour ! Est-elle toujours disponible ?",
-      sender: "other",
-      time: "10:45",
-    },
-    { id: 2, text: "Oui absolument !", sender: "me", time: "10:46" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
-  const { id } = useParams();
+  const { id: contactId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const myId = localStorage.getItem("user_id") ?? "";
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
+    if (!contactId) return;
+
+    const socket = getSocket();
+
+    socket.emit("join_conversation", { contactId });
+
+    const onHistory = (history: Message[]) => setMessages(history);
+
+    const onNewMessage = (msg: Message) =>
+      setMessages((prev) => [...prev, msg]);
+
+    const onMessagesRead = ({ by }: { by: string }) => {
+      if (by === contactId) {
+        setMessages((prev) =>
+          prev.map((m) => (m.id_expediteur === myId ? { ...m, lu: true } : m))
+        );
+      }
+    };
+
+    socket.on("conversation_history", onHistory);
+    socket.on("new_message", onNewMessage);
+    socket.on("messages_read", onMessagesRead);
+
+    return () => {
+      socket.off("conversation_history", onHistory);
+      socket.off("new_message", onNewMessage);
+      socket.off("messages_read", onMessagesRead);
+    };
+  }, [contactId]);
+
+  useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   const handleSendMessage = () => {
-    if (!inputText.trim()) return;
-    const newMessage = {
-      id: Date.now(),
-      text: inputText,
-      sender: "me",
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-    setMessages([...messages, newMessage]);
+    if (!inputText.trim() || !contactId) return;
+    const socket = getSocket();
+    socket.emit("send_message", { contactId, corps: inputText });
     setInputText("");
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      const newMessage = {
-        id: Date.now(),
-        text: "",
-        image: imageUrl,
-        sender: "me",
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-      setMessages([...messages, newMessage]);
-    }
   };
 
   return (
     <div className="h-full w-full bg-white dark:bg-[#0A0A0A] flex flex-col transition-colors duration-300">
       <>
-        {/* Header avec flou adapté */}
         <header className="fixed top-0 left-0 w-full bg-white/80 dark:bg-[#0A0A0A]/80 backdrop-blur-md z-50 px-6 pt-12 pb-4 border-b border-gray-100 dark:border-white/5 flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}
@@ -75,22 +79,24 @@ export default function ChatDetail() {
             />
           </button>
           <h1 className="text-sm font-black uppercase text-black dark:text-white">
-            Utilisateur {id}
+            Utilisateur {contactId}
           </h1>
         </header>
 
         <main className="flex-1 px-6 pt-32 pb-32 overflow-y-auto flex flex-col scroll-smooth">
           {messages.map((msg, index) => {
-            const isMe = msg.sender === "me";
+            const isMe = msg.id_expediteur === myId;
             const prevMsg = messages[index - 1];
             const nextMsg = messages[index + 1];
-            const isFirstInGroup = !prevMsg || prevMsg.sender !== msg.sender;
-            const isLastInGroup = !nextMsg || nextMsg.sender !== msg.sender;
+            const isFirstInGroup =
+              !prevMsg || prevMsg.id_expediteur !== msg.id_expediteur;
+            const isLastInGroup =
+              !nextMsg || nextMsg.id_expediteur !== msg.id_expediteur;
             const isMiddle = !isFirstInGroup && !isLastInGroup;
 
             return (
               <div
-                key={msg.id}
+                key={index}
                 className={`flex flex-col max-w-[80%] ${isMe ? "self-end items-end" : "items-start"} ${isFirstInGroup ? "mt-6" : "mt-0.5"}`}
               >
                 <div
@@ -116,12 +122,11 @@ export default function ChatDetail() {
                         }`
                   }`}
                 >
-                  {/* {msg.image && <img src={msg.image} className="rounded-lg max-h-64 w-full object-cover mb-1 border dark:border-white/10" onLoad={scrollToBottom} />} */}
-                  {msg.text && <p>{msg.text}</p>}
+                  <p>{msg.corps}</p>
                 </div>
-                {isLastInGroup && (
-                  <span className="text-[8px] font-black text-gray-400 dark:text-neutral-500 uppercase mt-1 px-2 tracking-widest">
-                    {msg.time} {isMe && "• Lu"}
+                {isLastInGroup && isMe && msg.lu && (
+                  <span className="text-[8px] font-black text-blue-500 uppercase mt-1 px-2 tracking-widest">
+                    Lu
                   </span>
                 )}
               </div>
@@ -132,19 +137,6 @@ export default function ChatDetail() {
 
         <div className="w-full p-6 bg-white dark:bg-[#0A0A0A] border-t border-gray-100 dark:border-white/5">
           <div className="flex items-center gap-3 bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-white/10 rounded-[24px] p-2 pl-4 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
-            <input
-              type="file"
-              hidden
-              ref={fileInputRef}
-              accept="image/*"
-              onChange={handleImageUpload}
-            />
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="size-10 text-gray-400 dark:text-neutral-500 hover:text-black dark:hover:text-white transition-colors"
-            >
-              <IonIcon name="image-outline" className="text-xl" />
-            </button>
             <input
               type="text"
               value={inputText}

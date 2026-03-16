@@ -1,8 +1,11 @@
 import { NavLink } from "react-router";
 import { menuItems } from "../../data/menu.ts";
 import IonIcon from "@reacticons/ionicons";
+import { useUnreadMessages } from "../../providers/UnreadMessagesProvider.tsx";
 
 export function NavBar() {
+  const { unreadCount } = useUnreadMessages();
+
   return (
     <div className="fixed bottom-6 md:bottom-0 left-0 w-full md:w-20 md:h-screen px-6 md:px-0 z-40 transition-all duration-300">
       <nav className="relative flex md:flex-col items-center justify-around md:justify-start md:gap-8 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-gray-100 dark:border-neutral-800 h-20 md:h-full rounded-[32px] md:rounded-none shadow-lg p-1.5 md:py-10">
@@ -18,7 +21,10 @@ export function NavBar() {
                   className={`hidden md:block absolute left-0 w-1 h-6 bg-black dark:bg-white rounded-r-full transition-all duration-300 ${isActive ? "opacity-100" : "opacity-0"}`}
                 />
 
-                <div className="h-7 flex items-center justify-center">
+                <div className="h-7 flex items-center justify-center relative">
+                  {item.to === "/message" && unreadCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 size-2 bg-red-500 rounded-full" />
+                  )}
                   <IonIcon
                     name={
                       isActive ? item.icon : (`${item.icon}-outline` as any)

@@ -12,6 +12,7 @@ import { NavBar } from "./components/navigation/NavBar.tsx";
 import { excludedRoutes } from "./data/excludedRoutes.ts";
 import { NavigationProvider } from "./providers/NavigationProvider.tsx";
 import { ThemeProvider } from "./providers/ThemeProvider.tsx";
+import { UnreadMessagesProvider } from "./providers/UnreadMessagesProvider.tsx";
 import ProtectedRoute from "./routes/ProtectedRoutes.tsx";
 import AddMission from "./pages/mission/AddMission.tsx";
 import Accueil from "./pages/Accueil.tsx";
@@ -112,7 +113,9 @@ createRoot(document.getElementById("root")!).render(
     <ThemeProvider>
         <BrowserRouter>
             <NavigationProvider>
-                <AppRouter />
+                <UnreadMessagesProvider>
+                    <AppRouter />
+                </UnreadMessagesProvider>
             </NavigationProvider>
         </BrowserRouter>
     </ThemeProvider>,
