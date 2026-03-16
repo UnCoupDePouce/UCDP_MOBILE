@@ -1,4 +1,4 @@
-import type { UserDTO } from "./User";
+import type { UserDTO } from "./user";
 
 export interface Mission {
   id: number;

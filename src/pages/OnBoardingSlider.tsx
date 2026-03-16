@@ -4,7 +4,7 @@ import { IonPage, IonContent } from "@ionic/react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperClass } from "swiper";
-import "swiper/css";
+//import "swiper/css";
 import "@ionic/react/css/ionic-swiper.css";
 
 export default function OnboardingSlider({

@@ -1,11 +1,11 @@
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("hasToken");
-  return {
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-};
-
+// const getAuthHeaders = () => {
+//   const token = localStorage.getItem("hasToken");
+//   return {
+//     "Content-Type": "application/json",
+//     ...(token ? { Authorization: `Bearer ${token}` } : {}),
+//   };
+// };
+//
 // export const projectService = {
 //   getAll: async (): Promise<Project[]> => {
 //     const response = await fetch("/api/projects");
