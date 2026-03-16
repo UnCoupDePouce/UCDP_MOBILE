@@ -1,4 +1,4 @@
-import type { AuthResponse, LoginCredentials } from "../types/auth";
+import type {AuthResponse, LoginCredentials, RegisterFormData} from "../types/auth";
 import type { User } from "../types/user";
 
 const getAuthHeaders = () => {
@@ -28,9 +28,11 @@ export const userService = {
             }
 
             return data;
-        } catch (err: any) {
-            console.error("Erreur dans userService.login:", err);
-            throw new Error(err.message || "Erreur serveur");
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                throw new Error(err.message);
+            }
+            throw new Error("Erreur serveur");
         }
     },
 
@@ -40,7 +42,7 @@ export const userService = {
         window.location.href = "/login";
     },
 
-    register: async (formData: any, userType: string): Promise<AuthResponse> => {
+    register: async (formData: RegisterFormData, userType: string): Promise<AuthResponse> => {
         const response = await fetch("/local/api/user/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -53,7 +55,7 @@ export const userService = {
         }
         return response.json();
     },
-    
+
     getById: async (id: string): Promise<User> => {
         const response = await fetch(`/local/api/user/${id}`, {
             method: "GET",

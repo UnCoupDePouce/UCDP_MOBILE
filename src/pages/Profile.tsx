@@ -22,8 +22,6 @@ export default function Profile() {
       [id_user]
   );
 
-  console.log("Données utilisateur :", user);
-
   const displayName = useMemo(() => {
     return user?.nom && user?.prenom
         ? `${user.prenom} ${user.nom}`
@@ -35,6 +33,12 @@ export default function Profile() {
     const last = user?.nom?.[0] || "";
     return (first + last).toUpperCase() || "?";
   }, [user]);
+
+  const handleLogout = () => {
+    if (window.confirm("Voulez-vous vraiment vous déconnecter ?")) {
+      userService.logout();
+    }
+  };
 
   if (loading) {
     return (
@@ -105,7 +109,10 @@ export default function Profile() {
             {isProMode && (
                 <InfoRow icon="business-outline" label="Entreprise" value={user?.raison_sociale} />
             )}
-            <button className="flex items-center justify-center gap-3 w-full p-5 mt-6 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 text-red-600 dark:text-red-500 rounded-[24px] font-black uppercase text-[11px] tracking-widest transition active:scale-95">
+            <button
+                onClick={handleLogout}
+                className="flex items-center justify-center gap-3 w-full p-5 mt-6 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 text-red-600 dark:text-red-500 rounded-[24px] font-black uppercase text-[11px] tracking-widest transition active:scale-95 hover:bg-red-100 dark:hover:bg-red-500/20"
+            >
               <IonIcon name="log-out" style={{ fontSize: "20px" }} />
               <span>Déconnexion</span>
             </button>
