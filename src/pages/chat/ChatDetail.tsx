@@ -30,27 +30,29 @@ export default function ChatDetail() {
 
     socket.emit("join_conversation", { contactId });
 
-    const onHistory = (history: Message[]) => setMessages(history);
+    socket.on("conversation_history", (history: Message[]) => {
+      setMessages(history);
+    });
 
-    const onNewMessage = (msg: Message) =>
+    socket.on("new_message", (msg: Message) => {
       setMessages((prev) => [...prev, msg]);
+    });
 
-    const onMessagesRead = ({ by }: { by: string }) => {
+    // Le contact a lu nos messages : on les marque tous comme lus localement
+    socket.on("messages_read", ({ by }: { by: string }) => {
       if (by === contactId) {
         setMessages((prev) =>
-          prev.map((m) => (m.id_expediteur === myId ? { ...m, lu: true } : m))
+          prev.map((m) =>
+            m.id_expediteur === myId ? { ...m, lu: true } : m
+          )
         );
       }
-    };
-
-    socket.on("conversation_history", onHistory);
-    socket.on("new_message", onNewMessage);
-    socket.on("messages_read", onMessagesRead);
+    });
 
     return () => {
-      socket.off("conversation_history", onHistory);
-      socket.off("new_message", onNewMessage);
-      socket.off("messages_read", onMessagesRead);
+      socket.off("conversation_history");
+      socket.off("new_message");
+      socket.off("messages_read");
     };
   }, [contactId]);
 
@@ -124,9 +126,13 @@ export default function ChatDetail() {
                 >
                   <p>{msg.corps}</p>
                 </div>
+
                 {isLastInGroup && isMe && msg.lu && (
-                  <span className="text-[8px] font-black text-blue-500 uppercase mt-1 px-2 tracking-widest">
-                    Lu
+                  <span className="flex items-center mt-1 px-1">
+                    <IonIcon
+                      name="checkmark-done"
+                      className="text-[13px] text-blue-500"
+                    />
                   </span>
                 )}
               </div>
