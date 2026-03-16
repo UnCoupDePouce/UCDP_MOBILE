@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 
-export function useFetch(url: string) {
-  const [data, setData] = useState(null);
+export function useFetch<T>(asyncFn: () => Promise<T>, deps: any[] = []) {
+  const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
     setLoading(true);
-    setData(null);
     setError(null);
-    axios
-      .get(url)
-      .then((res) => {
-        setLoading(false);
-        setData(res.data);
+    asyncFn()
+      .then((result) => {
+        if (isMounted) setData(result);
       })
-      .catch((err) => {
-        setLoading(false);
-        setError(err.message || "Erreur serveur");
+      .catch((err: any) => {
+        if (isMounted) setError(err.message || "Erreur serveur");
       })
-      .finally(() => setLoading(false));
-  });
-
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, deps);
   return { data, loading, error };
 }

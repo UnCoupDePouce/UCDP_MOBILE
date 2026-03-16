@@ -1,7 +1,10 @@
 import { useState, useCallback } from "react";
 import { Header } from "../components/navigation/Header.tsx";
-import IonIcon from "@reacticons/ionicons";
 import { useTheme } from "../providers/ThemeProvider.tsx";
+import { useFetch } from "../hooks/useFetch.tsx";
+import { userService } from "../services/userService.ts";
+import { useMemo } from "react";
+import IonIcon from "@reacticons/ionicons";
 
 export default function Profile() {
   const [isProMode, setIsProMode] = useState(false);
@@ -12,13 +15,30 @@ export default function Profile() {
   }, [theme, setTheme]);
 
   const isDark = theme === "dark";
+  const id_user = localStorage.getItem("user_id");
+  if (!id_user) {
+    return;
+  }
+
+  const { data: user, loading, error } = useFetch(() => userService.getById(id_user), [id_user]);
+
+  const displayName = useMemo(() => {
+    return user?.name && user?.surname
+      ? `${user.name} ${user.surname}`
+      : "Utilisateur";
+  }, [user]);
+
+  const initials = useMemo(() => {
+    const first = user?.name?.[0] || "";
+    const last = user?.surname?.[0] || "";
+    return (first + last).toUpperCase();
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950 transition-colors duration-300">
       <Header title="Mon Profil" />
 
       <main className="px-6 py-4 pb-32">
-        {/* 1. Toggle Thème (Dark/Light) */}
         <div className="mb-6 flex justify-end">
           <button
             onClick={toggleTheme}
@@ -36,77 +56,66 @@ export default function Profile() {
           </button>
         </div>
 
-        {/* 2. Switch Mode Client / Pro */}
         <div className="mb-10 bg-gray-50 dark:bg-neutral-900 border border-gray-100 dark:border-neutral-800 p-1.5 rounded-[24px] flex items-center relative h-14 transition-all">
           <div
-            className={`absolute h-[44px] w-[calc(50%-6px)] bg-black dark:bg-white rounded-[18px] transition-transform duration-300 ease-out ${
-              isProMode ? "translate-x-[calc(100%+0px)]" : "translate-x-0"
-            }`}
+            className={`absolute h-[44px] w-[calc(50%-6px)] bg-black dark:bg-white rounded-[18px] transition-transform duration-300 ease-out ${isProMode ? "translate-x-[calc(100%+0px)]" : "translate-x-0"
+              }`}
           />
           <button
             onClick={() => setIsProMode(false)}
-            className={`flex-1 relative z-10 text-[10px] font-black uppercase tracking-widest transition-colors ${
-              !isProMode
-                ? "text-white dark:text-black"
-                : "text-gray-400 dark:text-neutral-500"
-            }`}
+            className={`flex-1 relative z-10 text-[10px] font-black uppercase tracking-widest transition-colors ${!isProMode
+              ? "text-white dark:text-black"
+              : "text-gray-400 dark:text-neutral-500"
+              }`}
           >
             Mode Client
           </button>
           <button
             onClick={() => setIsProMode(true)}
-            className={`flex-1 relative z-10 text-[10px] font-black uppercase tracking-widest transition-colors ${
-              isProMode
-                ? "text-white dark:text-black"
-                : "text-gray-400 dark:text-neutral-500"
-            }`}
+            className={`flex-1 relative z-10 text-[10px] font-black uppercase tracking-widest transition-colors ${isProMode
+              ? "text-white dark:text-black"
+              : "text-gray-400 dark:text-neutral-500"
+              }`}
           >
             Mode Pro
           </button>
         </div>
 
-        {/* 3. Avatar & Identité */}
         <div className="flex flex-col items-center mb-10">
           <div className="relative">
             <div className="size-28 rounded-[32px] overflow-hidden border border-gray-100 dark:border-neutral-800 p-1.5 bg-gray-50 dark:bg-neutral-900 shadow-sm">
-              <img
-                src="https://i.pravatar.cc/150?u=2"
-                alt="Avatar"
-                className="w-full h-full rounded-[24px] object-cover"
-              />
+              {initials}
             </div>
             <button className="absolute -bottom-2 -right-2 bg-black dark:bg-white text-white dark:text-black size-10 rounded-2xl shadow-xl flex items-center justify-center border-4 border-white dark:border-neutral-950 active:scale-90 transition-all">
               <IonIcon name="camera" style={{ fontSize: "18px" }} />
             </button>
           </div>
           <h2 className="mt-6 text-2xl font-black text-black dark:text-white uppercase tracking-tighter transition-colors">
-            Prénom Nom
+            {displayName}
           </h2>
           <p className="text-[10px] font-black text-gray-400 dark:text-neutral-500 uppercase tracking-[0.2em] mt-1 transition-colors">
             {isProMode ? "Artisan Professionnel" : "Client Particulier"}
           </p>
         </div>
 
-        {/* 4. Stats Cards */}
-        <div className="grid grid-cols-2 gap-4 mb-10">
+        {/* <div className="grid grid-cols-2 gap-4 mb-10">
           <StatCard
             value={isProMode ? "24" : "12"}
             label={isProMode ? "Réalisations" : "Demandes"}
           />
           <StatCard value="4.9" label="Note" />
-        </div>
+        </div> */}
 
-        {/* 5. Menu Actions */}
         <div className="flex flex-col gap-y-3">
           <h3 className="text-[10px] font-black text-gray-400 dark:text-neutral-600 uppercase tracking-[0.2em] ml-2 mb-2 transition-colors">
             Compte
           </h3>
 
-          {isProMode && <MenuButton icon="briefcase" label="Mon entreprise" />}
+          {/* {isProMode && <MenuButton icon="briefcase" label="Mon entreprise" />}
           <MenuButton icon="person" label="Informations personnelles" />
           <MenuButton icon="wallet" label="Portefeuille & Paiement" />
           <MenuButton icon="shield-checkmark" label="Sécurité" />
-          <MenuButton icon="help-circle" label="Centre d'aide" />
+          <MenuButton icon="help-circle" label="Centre d'aide" /> */}
 
           <button className="flex items-center justify-center gap-3 w-full p-5 mt-6 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 text-red-600 dark:text-red-500 rounded-[24px] font-black uppercase text-[11px] tracking-widest transition active:scale-95">
             <IonIcon name="log-out" style={{ fontSize: "20px" }} />
