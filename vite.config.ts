@@ -12,9 +12,10 @@ export default defineConfig({
         secure: true,
       },
       "/local": {
-        target: "https://localhost:3000",
+        target: "http://localhost:3000",
         changeOrigin: true,
-        secure: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/local/, ""),
       },
     },
   },

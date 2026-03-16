@@ -1,40 +1,40 @@
 export interface User {
   id: number;
-  name: string;
-  surname: string;
-  raison?: string;
+  prenom: string;
+  nom: string;
+  raison_sociale?: string;
   mail: string;
-  phone: number;
+  telephone: number;
   adresse: string;
-  code: number;
-  city: string;
+  code_postal: number;
+  ville: string;
 }
 
 export interface UserDTO {
   id: number;
-  name: string;
-  surname: string;
+  prenom: string;
+  nom: string;
 }
 
 export interface UserPro {
   id: number;
-  name: string;
-  surname: string;
-  raison: string;
+  prenom: string;
+  nom: string;
+  raison_sociale: string;
   mail: string;
-  phone: number;
+  telephone: number;
   adresse: string;
-  code: number;
-  city: string;
+  code_postal: number;
+  ville: string;
 }
 
 export interface UserNonPro {
   id: number;
-  name: string;
-  surname: string;
+  prenom: string;
+  nom: string;
   mail: string;
-  phone: number;
+  telephone: number;
   adresse: string;
-  code: number;
-  city: string;
+  code_postal: number;
+  ville: string;
 }

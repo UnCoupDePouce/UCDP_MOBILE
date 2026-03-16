@@ -1,5 +1,5 @@
 import type { AuthResponse, LoginCredentials } from "../types/auth";
-import type { User, UserDTO } from "../types/user";
+import type { User } from "../types/user";
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem("hasToken");
@@ -15,7 +15,7 @@ export const userService = {
         credentials: LoginCredentials
     ): Promise<AuthResponse> => {
         try {
-            const response = await fetch("/api/user/login", {
+            const response = await fetch("/local/user/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(credentials),
@@ -35,7 +35,7 @@ export const userService = {
     },
 
     register: async (formData: any, userType: string): Promise<AuthResponse> => {
-        const response = await fetch("/api/user/register", {
+        const response = await fetch("/local/user/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ formData, userType }),
@@ -47,17 +47,9 @@ export const userService = {
         }
         return response.json();
     },
-
-    getAll: async (): Promise<User[]> => {
-        const response = await fetch("/api/users");
-        if (!response.ok)
-            throw new Error("Erreur lors de la récupération des utilisateurs");
-        return response.json();
-    },
-
     getById: async (id: string): Promise<User> => {
-        const response = await fetch(`/api/users/${id}`, {
-             method: "GET",
+        const response = await fetch(`/local/api/user/${id}`, {
+            method: "GET",
             headers: getAuthHeaders(),
         });
         if (!response.ok) throw new Error("Utilisateur introuvable");
