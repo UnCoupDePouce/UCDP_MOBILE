@@ -1,4 +1,4 @@
-import { Outlet, useParams, useNavigate } from "react-router";
+import { Outlet, useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { Header } from "../../components/navigation/Header.tsx";
 import { useUnreadMessages } from "../../providers/UnreadMessagesProvider.tsx";
@@ -54,14 +54,27 @@ export default function Layout() {
             >
               <div className="size-10 rounded-xl bg-gray-200 dark:bg-neutral-700 flex items-center justify-center shrink-0">
                 <span className="text-xs font-black uppercase text-gray-600 dark:text-neutral-300">
-                  {chat.prenom?.[0]}{chat.nom?.[0]}
+                  {chat.prenom?.[0]}
+                  {chat.nom?.[0]}
                 </span>
               </div>
               <div className="flex flex-col items-start overflow-hidden">
-                <span className="font-black uppercase text-[10px] truncate">
+                <span
+                  className={`font-black uppercase text-[10px] tracking-tight truncate ${
+                    id === chat.contact_id
+                      ? "text-white dark:text-black"
+                      : "text-black dark:text-white"
+                  }`}
+                >
                   {chat.prenom} {chat.nom}
                 </span>
-                <span className="text-[10px] text-gray-400 dark:text-neutral-500 truncate max-w-[180px]">
+                <span
+                  className={`text-[10px] truncate max-w-[180px] leading-tight ${
+                    id === chat.contact_id
+                      ? "text-white/60 dark:text-black/50"
+                      : "text-gray-400 dark:text-neutral-500"
+                  }`}
+                >
                   {chat.last_message}
                 </span>
               </div>

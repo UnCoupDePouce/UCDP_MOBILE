@@ -1,12 +1,20 @@
-import type { UserDTO } from "./user";
+import type {User} from "./user.ts";
+
+export interface Metier {
+  id_metier: string;
+  nom: string;
+}
 
 export interface Mission {
-  id: number;
-  name: string;
+  id_offre: string;
+  id_utilisateur: string;
+  id_metier: string;
+  titre: string;
   description: string;
-  date: Date;
-  price: number;
-  user: UserDTO;
-  location: string;
-  photo: string[];
+  localisation: string;
+  prix: number;
+  date_offre: string;
+  statut: boolean;
+  utilisateur: User;
+  metier: Metier;
 }

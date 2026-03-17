@@ -2,6 +2,8 @@ import { useParams, useNavigate } from "react-router";
 import { useEffect, useState, useRef } from "react";
 import IonIcon from "@reacticons/ionicons";
 import { getSocket } from "../../services/socketService";
+import { useFetch } from "../../hooks/useFetch.tsx";
+import { userService } from "../../services/userService.ts";
 
 interface Message {
   corps: string;
@@ -38,13 +40,10 @@ export default function ChatDetail() {
       setMessages((prev) => [...prev, msg]);
     });
 
-    // Le contact a lu nos messages : on les marque tous comme lus localement
     socket.on("messages_read", ({ by }: { by: string }) => {
       if (by === contactId) {
         setMessages((prev) =>
-          prev.map((m) =>
-            m.id_expediteur === myId ? { ...m, lu: true } : m
-          )
+          prev.map((m) => (m.id_expediteur === myId ? { ...m, lu: true } : m)),
         );
       }
     });
@@ -55,6 +54,11 @@ export default function ChatDetail() {
       socket.off("messages_read");
     };
   }, [contactId]);
+
+  const { data: user } = useFetch(
+    () => userService.getById(contactId || ""),
+    [contactId],
+  );
 
   useEffect(() => {
     scrollToBottom();
@@ -70,7 +74,7 @@ export default function ChatDetail() {
   return (
     <div className="h-full w-full bg-white dark:bg-[#0A0A0A] flex flex-col transition-colors duration-300">
       <>
-        <header className="fixed top-0 left-0 w-full bg-white/80 dark:bg-[#0A0A0A]/80 backdrop-blur-md z-50 px-6 pt-12 pb-4 border-b border-gray-100 dark:border-white/5 flex items-center gap-4">
+        <header className="fixed md:hidden top-0 left-0 w-full bg-white/80 dark:bg-[#0A0A0A]/80 backdrop-blur-md z-50 px-6 pt-12 pb-4 border-b border-gray-100 dark:border-white/5 flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}
             className="size-10 bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-white/5 rounded-xl flex items-center justify-center active:scale-90 transition-all"
@@ -81,7 +85,7 @@ export default function ChatDetail() {
             />
           </button>
           <h1 className="text-sm font-black uppercase text-black dark:text-white">
-            Utilisateur {contactId}
+            {user ? `${user.prenom} ${user.nom}` : "Chargement..."}
           </h1>
         </header>
 

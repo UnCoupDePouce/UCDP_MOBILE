@@ -27,8 +27,8 @@ export default function Register() {
   const [formData, setFormData] = useState({
     nom: "",
     prenom: "",
-    email: "",
-    password: "",
+    mail: "",
+    mdp: "",
     confirmMdp: "",
     telephone: "",
     adresse: "",
@@ -58,15 +58,15 @@ export default function Register() {
   const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()\-_]).{8,}$/;
   const nextStep = () => {
     if (
-      !formData.email.trim() ||
-      !formData.password.trim() ||
+      !formData.mail.trim() ||
+      !formData.mdp.trim() ||
       !formData.confirmMdp.trim()
     ) {
       setMessage({ status: 400, message: "Tous les champs sont obligatoires" });
       return;
     }
 
-    if (!allowedChars.test(formData.password)) {
+    if (!allowedChars.test(formData.mdp)) {
       setMessage({
         status: 400,
         message: "Le mot de passe contient des caractères non autorisés",
@@ -74,7 +74,7 @@ export default function Register() {
       return;
     }
 
-    if (!passwordRegex.test(formData.password)) {
+    if (!passwordRegex.test(formData.mdp)) {
       setMessage({
         status: 400,
         message:
@@ -83,7 +83,7 @@ export default function Register() {
       return;
     }
 
-    if (formData.password !== formData.confirmMdp) {
+    if (formData.mdp !== formData.confirmMdp) {
       setMessage({
         status: 400,
         message: "Les mots de passe ne correspondent pas",
@@ -98,12 +98,19 @@ export default function Register() {
   const prevStep = () => setStep(1);
 
   const handleSubmit = async (e: React.FormEvent) => {
+    const roleBDD = userType === "professionnel" ? "PRESTATAIRE" : "CLIENT";
+
+    const dataToSend = {
+      ...formData,
+      role: roleBDD
+    };
+
     e.preventDefault();
     try {
       const response = await fetch("/local/api/user/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, userType }),
+        body: JSON.stringify({ dataToSend, userType }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -115,6 +122,8 @@ export default function Register() {
       }
       setMessage({ status: 200, message: data.message });
       localStorage.setItem("hasToken", data.token);
+      localStorage.setItem("user_id", data.user.id_utilisateur);
+      localStorage.setItem("status", data.user.role);
       navigate("/");
     } catch (error) {
       console.error(error);
@@ -172,9 +181,9 @@ export default function Register() {
                 type="email"
                 placeholder="Adresse email"
                 className={inputStyleWithIcon}
-                value={formData.email}
+                value={formData.mail}
                 onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
+                  setFormData({ ...formData, mail: e.target.value })
                 }
                 required
               />
@@ -190,9 +199,9 @@ export default function Register() {
               <input
                 className={inputStyleWithIcon}
                 type={showPassword ? "text" : "password"}
-                value={formData.password}
+                value={formData.mdp}
                 onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
+                  setFormData({ ...formData, mdp: e.target.value })
                 }
                 placeholder="Mot de passe"
                 required

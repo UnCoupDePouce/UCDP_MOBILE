@@ -11,7 +11,11 @@ const UnreadMessagesContext = createContext<UnreadMessagesContextType>({
   resetUnread: () => {},
 });
 
-export function UnreadMessagesProvider({ children }: { children: React.ReactNode }) {
+export function UnreadMessagesProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [unreadCount, setUnreadCount] = useState(0);
   const listenerActive = useRef(false);
 

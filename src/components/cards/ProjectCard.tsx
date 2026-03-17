@@ -4,7 +4,7 @@ type CardProps = {
   title: string;
   category: string;
   date: string;
-  image: string;
+  image: string | null;
   infoLeft: string;
   infoRight: string;
   iconLeft?: string;
@@ -28,9 +28,14 @@ export default function ProjectCard({
       onClick={onClick}
       className="w-full bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 p-4 rounded-[28px] flex items-center gap-4 active:scale-[0.97] transition-all text-left shadow-sm"
     >
-      {/* Bordure de l'image plus sombre en dark mode */}
       <div className="size-20 shrink-0 rounded-[20px] overflow-hidden bg-gray-200 dark:bg-neutral-800 border border-gray-100 dark:border-neutral-700">
-        <img src={image} alt={title} className="w-full h-full object-cover" />
+        {image ? (
+            <img src={image} alt={title} className="w-full h-full object-cover" />
+        ):(
+            <img src="https://www.shutterstock.com/search/default-image-icon" alt={title} className="w-full h-full object-cover" />
+        )}
+
+
       </div>
 
       <div className="flex-1 min-w-0 py-1">
