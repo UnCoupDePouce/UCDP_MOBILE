@@ -1,9 +1,9 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'com.uncoupdepouce.mobile',
-  appName: 'UCDP_Mobile',
-  webDir: 'dist'
+  appId: "com.uncoupdepouce.mobile",
+  appName: "UCDP_Mobile",
+  webDir: "dist",
 };
 
 export default config;
