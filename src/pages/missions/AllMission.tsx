@@ -1,10 +1,10 @@
-import SelectedCategory from "../../../core/components/SelectedCategory";
-import ProjectCard from "../../../core/components/cards/ProjectCard";
-import { useNavigate } from "react-router";
-import { useFetch } from "../../../core/hooks/useFetch.tsx";
-import { missionService } from "../services/missionService.ts";
 import IonIcon from "@reacticons/ionicons";
-import type {Mission} from "../types/mission.ts";
+import { useNavigate } from "react-router";
+import { missionService } from "../../api/services/missionService";
+import ProjectCard from "../../components/ProjectCard";
+import { useFetch } from "../../hooks/useFetch";
+import type { Mission } from "../../types/mission";
+import SelectedCategory from "../../components/SelectedCategory";
 
 export default function AllMission() {
     const navigate = useNavigate();

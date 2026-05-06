@@ -1,9 +1,9 @@
 import {useState} from "react";
 import IonIcon from "@reacticons/ionicons";
-import {useFetch} from "../../../core/hooks/useFetch.tsx";
-import {metierService} from "../services/metierService.ts";
-import {missionService} from "../services/missionService.ts";
 import {useNavigate} from "react-router";
+import { metierService } from "../../api/services/metierService";
+import { missionService } from "../../api/services/missionService";
+import { useFetch } from "../../hooks/useFetch";
 
 type Step = 1 | 2 | 3;
 

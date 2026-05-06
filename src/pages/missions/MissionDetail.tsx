@@ -1,8 +1,9 @@
 import {useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import IonIcon from "@reacticons/ionicons";
-import {missionService} from "../services/missionService.ts";
-import {useFetch} from "../../../core/hooks/useFetch.tsx";
+import { missionService } from "../../api/services/missionService";
+import { useFetch } from "../../hooks/useFetch";
+
 
 export default function MissionDetail() {
     const navigate = useNavigate();

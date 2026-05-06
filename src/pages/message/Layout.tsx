@@ -1,7 +1,7 @@
 import { Outlet, useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { Header } from "../../../core/components/navigation/Header.tsx";
-import {useUnreadMessages} from "../../../providers/UnreadMessagesProvider.tsx";
+import { useUnreadMessages } from "../../providers/UnreadMessageProvider";
+import { Header } from "../../components/headerPage/Header";
 
 interface Conversation {
   contact_id: string;
@@ -39,7 +39,7 @@ export default function Layout() {
       <aside
         className={`w-full md:w-[400px] shrink-0 border-r border-gray-100  flex flex-col ${id ? "hidden md:flex" : "flex"}`}
       >
-        <Header title="Messages" showButton={false} className="md:hidden" />
+        <Header title="Messages" showButton={""} className="md:hidden" />
         <div className="flex-1 overflow-y-auto px-6 space-y-3 pt-4">
           {conversations.length === 0 && (
             <p className="text-xs text-gray-400  text-center mt-8 uppercase font-black tracking-widest">

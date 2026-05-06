@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import IonIcon from "@reacticons/ionicons";
-import { candidatureService } from "../../candidatures/services/candidatureService";
+import { candidatureService } from "../../api/services/candidatureService";
+
 
 type Candidature = {
   id_candidature: number;
