@@ -35,7 +35,7 @@ export default function Layout() {
   }, []);
 
   return (
-    <div className="flex h-screen bg-white  overflow-hidden">
+    <div className="flex h-screen  overflow-hidden">
       <aside
         className={`w-full md:w-[400px] shrink-0 border-r border-gray-100  flex flex-col ${id ? "hidden md:flex" : "flex"}`}
       >
@@ -50,7 +50,7 @@ export default function Layout() {
             <button
               key={chat.contact_id}
               onClick={() => navigate(`/message/${chat.contact_id}`)}
-              className={`w-full p-4 rounded-[24px] flex items-center gap-4 transition-all ${id === chat.contact_id ? "bg-black text-white " : "bg-gray-50 "}`}
+              className={`w-full p-4 flex items-center gap-4 transition-all ${id === chat.contact_id ? "bg-black text-white " : "bg-gray-50 "}`}
             >
               <div className="size-10 rounded-xl bg-gray-200  flex items-center justify-center shrink-0">
                 <span className="text-xs font-black uppercase text-gray-600 ">

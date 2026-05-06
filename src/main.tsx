@@ -62,7 +62,7 @@ export default function AppRouter() {
   }
 
   return (
-    <div className="font-montserrat flex flex-col min-h-screen w-full bg-white">
+    <div className="font-montserrat flex flex-col min-h-screen w-full bg-[#F2F0EB]">
       {!isExcluded && <NavBar />}
       <main
         className={`flex-1 flex flex-col md:pl-20 transition-all duration-300`}

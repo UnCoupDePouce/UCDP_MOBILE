@@ -16,7 +16,7 @@ export function Header({ title, showButton, className }: HeaderProps) {
   const prevPath = showButton;
 
   const showBackButton =
-    showButton !== undefined || !mainRoutes.includes(location.pathname);
+    showButton !== undefined && !mainRoutes.includes(location.pathname);
 
   console.log("Path de retour :", prevPath);
 
@@ -28,27 +28,28 @@ export function Header({ title, showButton, className }: HeaderProps) {
 
   return (
     <header
-      className={`sticky top-0 z-[100] w-full px-6 transition-all duration-300 border-b
+      className={`sticky top-0 z-[100] w-full px-6 transition-all duration-300
             ${
               isSticky
-                ? "bg-white/80 backdrop-blur-md border-gray-100 pt-14 pb-4"
-                : "bg-white border-transparent pt-14 pb-6"
+                ? "backdrop-blur-md border-gray-100 pt-14 pb-4"
+                : "border-transparent pt-14 pb-6"
             } ${className ?? ""}`}
     >
       <div className="flex items-center gap-4 h-10">
         {showBackButton && (
           <NavLink
             to={prevPath}
-            className="size-10 bg-gray-50 border border-gray-100 rounded-2xl flex items-center justify-center active:scale-90 transition-all text-black shrink-0 shadow-sm"
+            className="size-10 border rounded-full flex items-center justify-center active:scale-90 transition-all text-black shrink-0 shadow-sm"
           >
             <IonIcon name={"chevron-back" as never} className="text-xl" />
           </NavLink>
         )}
 
-        <h2 className="text-sm font-black uppercase tracking-[0.2em] text-black truncate py-2">
+        <h1 className="text-[#1A1A1A] font-[900] text-4xl uppercase leading-[0.85] tracking-tighter">
           {title}
-        </h2>
+        </h1>
       </div>
+      <hr className="h-px mt-8 bg-black/30 border-0" />
     </header>
   );
 }

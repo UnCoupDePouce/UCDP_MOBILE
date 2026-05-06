@@ -48,7 +48,7 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-white transition-colors duration-300">
-      <Header title="Mon Profil" showButton={""}/>
+      <Header title="Mon Profil" showButton={"null"}/>
 
       <main className="px-6 py-4 pb-32">
         {isAdmin && (

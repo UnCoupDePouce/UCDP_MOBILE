@@ -15,7 +15,7 @@ export function NavBar() {
 
   return (
     <div className="fixed bottom-6 md:bottom-0 left-0 w-full md:w-20 md:h-screen px-6 md:px-0 z-40 transition-all duration-300">
-      <nav className="relative flex md:flex-col items-center justify-around md:justify-start md:gap-8 bg-white/90 backdrop-blur-xl border border-gray-100  h-20 md:h-full rounded-[32px] md:rounded-none shadow-lg p-1.5 md:py-10">
+      <nav className="relative flex md:flex-col items-center justify-around md:justify-start md:gap-8 bg-white/90 backdrop-blur-xl border border-gray-100 h-20 md:h-full p-1.5 md:py-10 shadow-2xl">
         {filteredMenuItems.map((item) => (
           <NavLink
             key={item.to}
@@ -41,7 +41,7 @@ export function NavBar() {
                     className={`transition-all duration-300 ${
                       isActive
                         ? "text-black "
-                        : "text-gray-400  group-hover:text-black "
+                        : "text-gray-400  group-hover:text-black hover:translate-y-0.5 transition-all"
                     }`}
                     style={{
                       fontSize: item.name === "Créer" ? "28px" : "24px",
