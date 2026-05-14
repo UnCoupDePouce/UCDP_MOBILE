@@ -15,7 +15,7 @@ export default function Login() {
   } = useLogin();
 
   return (
-    <div className="fixed inset-0 bg-white  flex flex-col px-8 pb-8 pt-12 overflow-y-auto transition-colors duration-300">
+    <div className="fixed inset-0 flex flex-col px-8 pb-8 pt-12 overflow-y-auto transition-colors duration-300">
       <div className="mb-10">
         <h2 className="text-4xl font-black tracking-tighter uppercase leading-none text-black ">
           Bon retour <br /> parmi nous

@@ -72,9 +72,9 @@ export default function ChatDetail() {
   };
 
   return (
-    <div className="h-full w-full bg-white  flex flex-col transition-colors duration-300">
+    <div className="h-full w-full flex flex-col transition-colors duration-300">
       <>
-        <header className="fixed md:hidden top-0 left-0 w-full bg-white/80 /80 backdrop-blur-md z-50 px-6 pt-12 pb-4 border-b border-gray-100  flex items-center gap-4">
+        <header className="fixed md:hidden top-0 left-0 w-full border-b border-gray-400 bg-white backdrop-blur-md z-50 px-6 pt-4 pb-2 flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}
             className="size-10 bg-gray-50  border border-gray-200  rounded-xl flex items-center justify-center active:scale-90 transition-all"
@@ -89,7 +89,7 @@ export default function ChatDetail() {
           </h1>
         </header>
 
-        <main className="flex-1 px-6 pt-32 pb-32 overflow-y-auto flex flex-col scroll-smooth">
+        <main className="flex-1 px-6 pt-24 pb-32 overflow-y-auto flex flex-col scroll-smooth">
           {messages.map((msg, index) => {
             const isMe = msg.id_expediteur === myId;
             const prevMsg = messages[index - 1];
@@ -106,27 +106,24 @@ export default function ChatDetail() {
                 className={`flex flex-col max-w-[80%] ${isMe ? "self-end items-end" : "items-start"} ${isFirstInGroup ? "mt-6" : "mt-0.5"}`}
               >
                 <div
-                  className={`px-4 py-2 text-[15px] font-medium leading-[1.3] transition-all duration-300 ${
-                    isMe
-                      ? `bg-black text-white  ${
-                          isFirstInGroup && !isLastInGroup
-                            ? "rounded-[22px] rounded-br-[4px]"
-                            : isMiddle
-                              ? "rounded-[22px] rounded-br-[4px] rounded-tr-[4px]"
-                              : isLastInGroup && !isFirstInGroup
-                                ? "rounded-[22px] rounded-tr-[4px]"
-                                : "rounded-[22px] rounded-br-none"
-                        }`
-                      : `bg-gray-100 text-black  ${
-                          isFirstInGroup && !isLastInGroup
-                            ? "rounded-[22px] rounded-bl-[4px]"
-                            : isMiddle
-                              ? "rounded-[22px] rounded-bl-[4px] rounded-tl-[4px]"
-                              : isLastInGroup && !isFirstInGroup
-                                ? "rounded-[22px] rounded-tl-[4px]"
-                                : "rounded-[22px] rounded-bl-none"
-                        }`
-                  }`}
+                  className={`px-4 py-2 text-[15px] font-medium leading-[1.3] transition-all duration-300 ${isMe
+                      ? `bg-black text-white  ${isFirstInGroup && !isLastInGroup
+                        ? "rounded-[22px] rounded-br-[4px]"
+                        : isMiddle
+                          ? "rounded-[22px] rounded-br-[4px] rounded-tr-[4px]"
+                          : isLastInGroup && !isFirstInGroup
+                            ? "rounded-[22px] rounded-tr-[4px]"
+                            : "rounded-[22px] rounded-br-none"
+                      }`
+                      : `bg-orange-300 text-black  ${isFirstInGroup && !isLastInGroup
+                        ? "rounded-[22px] rounded-bl-[4px]"
+                        : isMiddle
+                          ? "rounded-[22px] rounded-bl-[4px] rounded-tl-[4px]"
+                          : isLastInGroup && !isFirstInGroup
+                            ? "rounded-[22px] rounded-tl-[4px]"
+                            : "rounded-[22px] rounded-bl-none"
+                      }`
+                    }`}
                 >
                   <p>{msg.corps}</p>
                 </div>
@@ -145,8 +142,8 @@ export default function ChatDetail() {
           <div ref={messagesEndRef} />
         </main>
 
-        <div className="w-full p-6 bg-white  border-t border-gray-100 ">
-          <div className="flex items-center gap-3 bg-gray-50  border border-gray-200  rounded-[24px] p-2 pl-4 focus-within:ring-2 focus-within:ring-black transition-all">
+        <div className="w-full p-2 border-t border-gray-400 ">
+          <div className="flex items-center gap-3 bg-gray-50  border border-gray-200  rounded-[24px] px-2 pl-4 focus-within:ring-2 focus-within:ring-black transition-all">
             <input
               type="text"
               value={inputText}
@@ -157,7 +154,7 @@ export default function ChatDetail() {
             />
             <button
               onClick={handleSendMessage}
-              className="size-10 bg-black text-white  rounded-[18px] flex items-center justify-center active:scale-90 transition-all shadow-lg"
+              className="size-8 m-1 bg-black text-white  rounded-[18px] flex items-center justify-center active:scale-90 transition-all shadow-lg"
             >
               <IonIcon name="send" className="text-sm" />
             </button>

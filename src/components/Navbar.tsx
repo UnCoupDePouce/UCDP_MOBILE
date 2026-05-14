@@ -14,8 +14,8 @@ export function NavBar() {
   });
 
   return (
-    <div className="fixed bottom-6 md:bottom-0 left-0 w-full md:w-20 md:h-screen px-6 md:px-0 z-40 transition-all duration-300">
-      <nav className="relative flex md:flex-col items-center justify-around md:justify-start md:gap-8 bg-white/90 backdrop-blur-xl border border-gray-100 h-20 md:h-full p-1.5 md:py-10 shadow-2xl">
+    <div className="fixed bottom-0 md:bottom-0 left-0 w-full md:w-20 md:h-screen md:px-0 z-40 transition-all duration-300 bg-[#F2F0EB]">
+      <nav className="relative flex md:flex-col items-center justify-around md:justify-start md:gap-8 border-t border-gray-500 h-20 md:h-full p-1.5 md:py-10 shadow-2xl">
         {filteredMenuItems.map((item) => (
           <NavLink
             key={item.to}
@@ -25,9 +25,8 @@ export function NavBar() {
             {({ isActive }) => (
               <>
                 <div
-                  className={`hidden md:block absolute left-0 w-1 h-6 bg-black  rounded-r-full transition-all duration-300 ${isActive ? "opacity-100" : "opacity-0"}`}
+                  className={`hidden md:block absolute left-0 w-1 h-6 bg-black rounded-r-full transition-all duration-300 ${isActive ? "opacity-100" : "opacity-0"}`}
                 />
-
                 <div className="h-7 flex items-center justify-center relative">
                   {item.to === "/message" && unreadCount > 0 && (
                     <span className="absolute -top-0.5 -right-0.5 size-2 bg-red-500 rounded-full" />

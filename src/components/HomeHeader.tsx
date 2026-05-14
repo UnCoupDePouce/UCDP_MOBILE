@@ -10,12 +10,12 @@ export function HomeHeader() {
   const goToProfile = () => navigate("/user");
 
   return (
-    <header className="pt-6 mb-10 flex flex-col gap-8">
+    <header className="pt-6 mb-6 flex flex-col gap-8">
       <div className="flex justify-end gap-2">
         <button className="size-10 bg-white flex items-center justify-center shadow-sm active:translate-y-0.5 transition-all hover:cursor-pointer">
           <IonIcon name="notifications-outline" className="text-xl text-black" />
         </button>
-        
+
         <button onClick={goToProfile} className="active:scale-95 hover:cursor-pointer active:translate-y-0.5 transition-all">
           <div className="size-10 bg-[#5D5FEF] flex items-center justify-center text-white font-black text-xs tracking-tighter">
             {user?.prenom?.charAt(0).toUpperCase()}
@@ -31,10 +31,10 @@ export function HomeHeader() {
         <h1 className="text-[#1A1A1A] font-[900] text-4xl uppercase leading-[0.85] tracking-tighter">
           {user?.prenom}, <br />
           {user?.role === "CLIENT" ? "QUE CRÉONS-NOUS" : "QUE RÉPARONS-NOUS"} <br />
-          <span className="flex items-center gap-2">
-            AUJOURD'HUI ?
-            <span className="inline-block w-2 h-2 bg-orange-500 rounded-full"></span>
-          </span>
+            <span className="flex items-end gap-2">
+              AUJOURD'HUI ?
+              <span className="inline-block w-2 h-2 bg-orange-500 rounded-full"></span>
+            </span>
         </h1>
       </div>
     </header>

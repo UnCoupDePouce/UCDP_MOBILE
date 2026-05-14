@@ -45,7 +45,7 @@ export default function Home() {
           <input
             type="text"
             placeholder="Fuite, peinture, dépannage..."
-            className="w-full bg-white border-2 border-white rounded-2xl py-4 pl-12 pr-14 text-sm font-medium focus:outline-none"
+            className="w-full bg-white border-2 border-white rounded-full py-3 pl-12 pr-14 text-sm font-medium focus:outline-none"
           />
         </div>
 
@@ -66,7 +66,7 @@ export default function Home() {
 
         <div className="flex flex-col gap-y-2">
           <div className="flex items-center gap-1 mb-6">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2">
               <span className="text-orange-500 font-black text-xs">02</span>
               <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
                 Missions à proximité

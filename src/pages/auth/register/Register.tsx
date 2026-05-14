@@ -1,14 +1,17 @@
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import IonIcon from "@reacticons/ionicons";
 import Message from "../../../components/Message.tsx";
 import { useRegister } from "./useRegister.tsx";
+import { useEffect } from "react";
 
 export default function Register() {
+  const [searchParams] = useSearchParams();
+
   const {
     step,
+    message,
     userType,
     setUserType,
-    message,
     showPassword,
     setShowPassword,
     showConfirmPassword,
@@ -22,6 +25,14 @@ export default function Register() {
     handleSubmit,
   } = useRegister();
 
+  useEffect(() => {
+    if (searchParams.has("pro")) {
+      setUserType("professionnel");
+    } else {
+      setUserType("particulier");
+    }
+  }, [searchParams, setUserType]);
+
   const listeMetiers = [
     "Plombier",
     "Électricien",
@@ -34,7 +45,7 @@ export default function Register() {
     "w-full bg-gray-100 border-none h-16 pl-14 pr-14 rounded-2xl focus:ring-2 focus:ring-black text-black transition-all outline-none";
 
   return (
-    <div className="fixed inset-0 bg-white flex flex-col px-8 pb-8 pt-12 overflow-y-auto transition-colors duration-300">
+    <div className="fixed inset-0 flex flex-col px-8 pb-8 pt-12 overflow-y-auto transition-colors duration-300">
       {message && <Message data={message} />}
 
       <div className="flex gap-2 mb-10 max-w-xl md:mx-auto md:w-full">
@@ -67,23 +78,6 @@ export default function Register() {
       >
         {step === 1 && (
           <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
-            <div className="grid grid-cols-2 bg-gray-100 p-1.5 rounded-2xl mb-6">
-              <button
-                type="button"
-                onClick={() => setUserType("particulier")}
-                className={`py-3 rounded-xl font-black text-xs uppercase transition-all ${userType === "particulier" ? "bg-white text-black shadow-sm" : "text-gray-400"}`}
-              >
-                Particulier
-              </button>
-              <button
-                type="button"
-                onClick={() => setUserType("professionnel")}
-                className={`py-3 rounded-xl font-black text-xs uppercase transition-all ${userType === "professionnel" ? "bg-white text-black shadow-sm" : "text-gray-400"}`}
-              >
-                Professionnel
-              </button>
-            </div>
-
             <div className="relative">
               <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
                 <IonIcon

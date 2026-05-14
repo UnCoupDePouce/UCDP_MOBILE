@@ -1,5 +1,6 @@
 export const excludedRoutes = [
   "/notification",
+  "/auth",
   "/login",
   "/register",
   "/message/:id",

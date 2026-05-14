@@ -47,13 +47,13 @@ export default function MissionDetail() {
     };
 
     if (loading) return (
-        <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center">
             <div className="size-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
         </div>
     );
 
     if (error || !mission) return (
-        <div className="min-h-screen bg-white flex flex-col items-center justify-center p-10 text-center">
+        <div className="min-h-screen flex flex-col items-center justify-center p-10 text-center">
             <IonIcon name="alert-circle" className="text-5xl text-red-500 mb-4" />
             <p className="font-black uppercase tracking-widest text-sm">Mission introuvable</p>
             <button onClick={() => navigate(-1)}
@@ -64,7 +64,7 @@ export default function MissionDetail() {
     );
 
     return (
-        <div className="flex flex-col min-h-screen bg-white">
+        <div className="flex flex-col min-h-screen">
             <header className="fixed top-0 left-0 w-full z-50 px-6 pt-12 flex justify-between items-center pointer-events-none">
                 <button
                     onClick={() => navigate(-1)}
@@ -81,7 +81,7 @@ export default function MissionDetail() {
                 </span>
             </div>
 
-            <main className="relative -mt-10 bg-white px-8 pt-10 pb-32 shadow-2xl flex flex-col gap-8">
+            <main className="relative  px-8 pt-10 pb-32 shadow-2xl flex flex-col gap-8">
 
                 <section>
                     <h1 className="text-3xl font-black text-black uppercase tracking-tighter leading-tight">
@@ -105,7 +105,7 @@ export default function MissionDetail() {
                         {mission.description}
                     </p>
 
-                    <div className="inline-flex items-center gap-2 border border-black/10 px-4 py-2 mt-6 rounded-xl">
+                    <div className="inline-flex items-center gap-2 border border-black/10 px-4 py-2 mt-6 rounded-full">
                         <IonIcon name="location" className="text-black text-sm" />
                         <span className="text-[10px] font-black uppercase tracking-tight text-black">
                             {mission.localisation || "France"}
@@ -140,13 +140,19 @@ export default function MissionDetail() {
                 </section>
 
                 {(userStatus === "PRESTATAIRE" || userStatus === "ADMIN") && (
-                    <div className="fixed bottom-0 left-0 w-full p-6 bg-gradient-to-t from-white via-white to-transparent z-50">
+                    <div className="flex items-center gap-4 fixed bottom-0 left-0 w-full p-6 to-transparent z-50 bg-[#F2F0EB] border-t border-gray-200">
+                        <div>
+                            <span>
+                                <span className="font-black text-[24px]">65</span>
+                                <span className="font-[900] text-[24px]">€</span>
+                            </span>
+                        </div>
                         <button
                             onClick={handleApply}
                             disabled={isApplying}
-                            className={`w-full h-16 rounded-2xl font-[900] text-lg uppercase tracking-tighter transition-all active:scale-[0.98] shadow-xl flex items-center justify-center gap-3 ${isApplying
-                                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                                    : "bg-orange-500 text-black hover:bg-orange-400"
+                            className={`w-full h-12 rounded-full font-[900] text-lg uppercase tracking-tighter transition-all active:scale-[0.98] shadow-xl flex items-center justify-center gap-3 ${isApplying
+                                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                : "bg-orange-500 text-black hover:bg-orange-400"
                                 }`}
                         >
                             {isApplying ? (

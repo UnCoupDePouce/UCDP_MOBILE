@@ -1,6 +1,6 @@
 import "./index.css";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router";
 import Login from "./pages/auth/login/Login.tsx";
 import Register from "./pages/auth/register/Register.tsx";
 import Home from "./pages/home/Home.tsx";
@@ -12,7 +12,6 @@ import { NavigationProvider } from "./providers/NavigationProvider.tsx";
 import { RGPDPage } from "./pages/legal/RGPD.tsx";
 import { TermsPage } from "./pages/legal/Terms.tsx";
 import { useState } from "react";
-import { excludedRoutes } from "./data/data.ts";
 import OnboardingSlider from "./pages/home/OnBoardingSlider.tsx";
 import SplashScreen from "./pages/home/SplashScreen.tsx";
 import ChatDetail from "./pages/message/ChatDetail.tsx";
@@ -21,11 +20,11 @@ import Layout from "./pages/message/Layout.tsx";
 import AddMission from "./pages/missions/AddMission.tsx";
 import AllMission from "./pages/missions/AllMission.tsx";
 import MissionDetail from "./pages/missions/MissionDetail.tsx";
+import LandingAuth from "./pages/auth/LandingAuth.tsx";
 
 export default function AppRouter() {
   const { isExcluded } = useMain();
 
-  const location = useLocation();
   const navigate = useNavigate();
 
   const [showSplash, setShowSplash] = useState(true);
@@ -41,16 +40,16 @@ export default function AppRouter() {
       setShowOnboarding(false);
       navigate('/');
     } else if (!hasSeenOnboarding) {
-      setShowOnboarding(true);
+      setShowOnboarding(false);
     } else {
-      navigate('/login');
+      navigate('/auth');
     }
   };
 
   const handleOnboardingComplete = () => {
     localStorage.setItem('hasSeenOnboarding', 'true');
     setShowOnboarding(false);
-    navigate('/login');
+    navigate('/auth');
   };
 
   if (showSplash) {
@@ -69,6 +68,7 @@ export default function AppRouter() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="auth" element={<LandingAuth />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="/message" element={<Layout />}>

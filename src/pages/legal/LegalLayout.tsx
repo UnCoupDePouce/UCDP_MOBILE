@@ -10,7 +10,7 @@ export default function LegalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Header title={title} showButton={parent} />
       <main className="px-8 py-10 pb-20 max-w-2xl mx-auto">
         <div className="prose prose-sm">{children}</div>

@@ -113,25 +113,24 @@ export default function AddMission() {
     );
 
     return (
-        <div
-            className="fixed inset-0 flex flex-col font-sans transition-colors duration-300">
-            <Header title="VOTRE PROJET" showButton={""} className="md:hidden" />
-            <header className="px-8 pb-6 shrink-0 z-10">
-                <div className="flex gap-2 mb-8">
-                    {[1, 2, 3].map((s) => (
-                        <div
-                            key={s}
-                            className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${step >= s ? "bg-orange-500" : "bg-gray-300 "}`}
-                        />
-                    ))}
-                </div>
-                <h1 className="text-4xl font-black uppercase tracking-tighter text-black  leading-none">
-                    {step === 1 && ""}
-                    {step === 2 && "DÉCRIVEZ LE CHANTIER"}
-                </h1>
-            </header>
+        <main className="min-h-screen pb-28 font-sans">
+            <div className="max-w-7xl mx-auto px-6 pb-28">
+                <Header title="VOTRE PROJET" showButton={""} className="md:hidden" />
+                <header className="px-8 pb-6 shrink-0 z-10">
+                    <div className="flex gap-2 mb-8">
+                        {[1, 2, 3].map((s) => (
+                            <div
+                                key={s}
+                                className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${step >= s ? "bg-orange-500" : "bg-gray-300 "}`}
+                            />
+                        ))}
+                    </div>
+                    <h1 className="text-4xl font-black uppercase tracking-tighter text-black  leading-none">
+                        {step === 1 && ""}
+                        {step === 2 && "DÉCRIVEZ LE CHANTIER"}
+                    </h1>
+                </header>
 
-            <main className="flex-1 overflow-y-auto px-8 touch-pan-y">
                 <div className="flex flex-col min-h-full">
                     <div className="flex-1 py-4">
                         {step === 1 && (
@@ -177,8 +176,8 @@ export default function AddMission() {
                                                             type="button"
                                                             onClick={() => setFormData(prev => ({ ...prev, profession: String(p.id_metier) }))}
                                                             className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border-2 ${isSelected
-                                                                    ? "bg-black text-white border-black shadow-lg"
-                                                                    : "bg-white text-black border-gray-100 hover:border-gray-300"
+                                                                ? "bg-black text-white border-black shadow-lg"
+                                                                : "bg-white text-black border-gray-100 hover:border-gray-300"
                                                                 }`}
                                                         >
                                                             {p.nom}
@@ -304,7 +303,7 @@ export default function AddMission() {
                         )}
                     </div>
                 </div>
-            </main>
-        </div>
+            </div>
+        </main>
     );
 }
