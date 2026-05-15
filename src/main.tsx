@@ -16,15 +16,15 @@ import OnboardingSlider from "./pages/home/OnBoardingSlider.tsx";
 import SplashScreen from "./pages/home/SplashScreen.tsx";
 import ChatDetail from "./pages/message/ChatDetail.tsx";
 import ChatIndex from "./pages/message/ChatIndex.tsx";
-import Layout from "./pages/message/Layout.tsx";
+import LayoutMessage from "./Layout/LayoutMessage.tsx";
 import AddMission from "./pages/missions/AddMission.tsx";
 import AllMission from "./pages/missions/AllMission.tsx";
 import MissionDetail from "./pages/missions/MissionDetail.tsx";
 import LandingAuth from "./pages/auth/LandingAuth.tsx";
+import Layout from "./Layout/Layout.tsx";
+import Candidatures from "./pages/candidatures/Candidature.tsx";
 
 export default function AppRouter() {
-  const { isExcluded } = useMain();
-
   const navigate = useNavigate();
 
   const [showSplash, setShowSplash] = useState(true);
@@ -61,29 +61,27 @@ export default function AppRouter() {
   }
 
   return (
-    <div className="font-montserrat flex flex-col min-h-screen w-full bg-[#F2F0EB]">
-      {!isExcluded && <NavBar />}
-      <main
-        className={`flex-1 flex flex-col md:pl-20 transition-all duration-300`}
-      >
-        <Routes>
+    <>
+      <Routes>
+        <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="auth" element={<LandingAuth />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="/message" element={<Layout />}>
+          <Route path="message" element={<LayoutMessage />}>
             <Route index element={<ChatIndex />} />
             <Route path=":id" element={<ChatDetail />} />
           </Route>
+          <Route path="candidatures" element={<Candidatures />} />
           <Route path="mission" element={<AllMission />} />
           <Route path="mission/:id" element={<MissionDetail />} />
           <Route path="new/mission" element={<AddMission />} />
           <Route path="user" element={<Profile />} />
-          <Route path="/legal/rgpd" element={<RGPDPage />} />
-          <Route path="/legal/terms" element={<TermsPage />} />
-        </Routes>
-      </main>
-    </div>
+          <Route path="legal/rgpd" element={<RGPDPage />} />
+          <Route path="legal/terms" element={<TermsPage />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 createRoot(document.getElementById("root")!).render(

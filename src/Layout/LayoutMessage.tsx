@@ -1,7 +1,7 @@
 import { Outlet, useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { useUnreadMessages } from "../../providers/UnreadMessageProvider";
-import { Header } from "../../components/headerPage/Header";
+import { useUnreadMessages } from "../providers/UnreadMessageProvider";
+import { Header } from "../components/headerPage/Header";
 
 interface Conversation {
   contact_id: string;
@@ -35,9 +35,9 @@ export default function Layout() {
   }, []);
 
   return (
-    <div className="flex h-screen  overflow-hidden">
+    <div className="flex h-screen overflow-hidden">
       <aside
-        className={`w-full md:w-[400px] shrink-0 border-r border-gray-100  flex flex-col ${id ? "hidden md:flex" : "flex"}`}
+        className={`w-full md:w-100 shrink-0 border-r border-gray-100  flex flex-col ${id ? "hidden md:flex" : "flex"}`}
       >
         <Header title="Messages" showButton={""} className="md:hidden" />
         <div className="flex-1 overflow-y-auto px-6 space-y-3 pt-4">
@@ -60,20 +60,18 @@ export default function Layout() {
               </div>
               <div className="flex flex-col items-start overflow-hidden">
                 <span
-                  className={`font-black uppercase text-[10px] tracking-tight truncate ${
-                    id === chat.contact_id
+                  className={`font-black uppercase text-[10px] tracking-tight truncate ${id === chat.contact_id
                       ? "text-white "
                       : "text-black "
-                  }`}
+                    }`}
                 >
                   {chat.prenom} {chat.nom}
                 </span>
                 <span
-                  className={`text-[10px] truncate max-w-[180px] leading-tight ${
-                    id === chat.contact_id
+                  className={`text-[10px] truncate max-w-45 leading-tight ${id === chat.contact_id
                       ? "text-white/60"
                       : "text-gray-400"
-                  }`}
+                    }`}
                 >
                   {chat.last_message}
                 </span>

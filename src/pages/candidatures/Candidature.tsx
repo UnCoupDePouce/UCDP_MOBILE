@@ -42,8 +42,8 @@ const FILTERS: { label: string; value: Statut | "TOUTES" }[] = [
 
 const statusConfig: Record<Statut, { label: string; color: string; icon: string }> = {
     EN_ATTENTE: { label: "En attente", color: "bg-amber-100 text-amber-700", icon: "time-outline" },
-    VALIDE:     { label: "Acceptée",   color: "bg-green-100 text-green-700", icon: "checkmark-circle-outline" },
-    REFUSE:     { label: "Refusée",    color: "bg-red-100 text-red-700", icon: "close-circle-outline" },
+    VALIDE: { label: "Acceptée", color: "bg-green-100 text-green-700", icon: "checkmark-circle-outline" },
+    REFUSE: { label: "Refusée", color: "bg-red-100 text-red-700", icon: "close-circle-outline" },
 };
 
 export default function Candidatures() {
@@ -71,10 +71,9 @@ function VuePrestataire({ navigate }: { navigate: ReturnType<typeof useNavigate>
         : candidatures.filter((c) => c.statut === filter);
 
     return (
-        <div className="min-h-screen bg-white pb-24 transition-colors duration-300">
+        <>
             <Header title="Mes candidatures" showButton={""} className="md:hidden" />
 
-            {/* Filtres */}
             <div className="px-6 mb-6">
                 <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
                     {FILTERS.map((f) => {
@@ -85,18 +84,16 @@ function VuePrestataire({ navigate }: { navigate: ReturnType<typeof useNavigate>
                             <button
                                 key={f.value}
                                 onClick={() => setFilter(f.value)}
-                                className={`shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 ${
-                                    filter === f.value
-                                        ? "bg-black  text-white  shadow-lg"
-                                        : "bg-gray-100  text-gray-500 "
-                                }`}
+                                className={`shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 ${filter === f.value
+                                    ? "bg-black  text-white  shadow-lg"
+                                    : "bg-gray-100  text-gray-500 "
+                                    }`}
                             >
                                 {f.label}
-                                <span className={`text-[9px] px-1.5 py-0.5 rounded-lg font-black ${
-                                    filter === f.value
-                                        ? "bg-white/20  text-white "
-                                        : "bg-black/10 /10 text-black "
-                                }`}>{count}</span>
+                                <span className={`text-[9px] px-1.5 py-0.5 rounded-lg font-black ${filter === f.value
+                                    ? "bg-white/20  text-white "
+                                    : "bg-black/10 /10 text-black "
+                                    }`}>{count}</span>
                             </button>
                         );
                     })}
@@ -149,7 +146,7 @@ function VuePrestataire({ navigate }: { navigate: ReturnType<typeof useNavigate>
                     ))
                 )}
             </main>
-        </div>
+        </>
     );
 }
 
@@ -194,7 +191,7 @@ function VueClient({ navigate }: { navigate: ReturnType<typeof useNavigate> }) {
     const traitees = candidatures.filter((c) => c.statut !== "EN_ATTENTE");
 
     return (
-        <div className="min-h-screen bg-white  pb-24 transition-colors duration-300">
+        <>
             <Header title="Candidatures reçues" showButton={""} className="md:hidden" />
 
             <main className="px-6 space-y-8">
@@ -204,7 +201,6 @@ function VueClient({ navigate }: { navigate: ReturnType<typeof useNavigate> }) {
                     <Empty text="Aucune candidature reçue" />
                 ) : (
                     <>
-                        {/* En attente */}
                         {enAttente.length > 0 && (
                             <section>
                                 <SectionTitle
@@ -227,7 +223,6 @@ function VueClient({ navigate }: { navigate: ReturnType<typeof useNavigate> }) {
                             </section>
                         )}
 
-                        {/* Traitées */}
                         {traitees.length > 0 && (
                             <section>
                                 <SectionTitle label="Traitées" count={traitees.length} color="text-gray-400" />
@@ -266,7 +261,7 @@ function VueClient({ navigate }: { navigate: ReturnType<typeof useNavigate> }) {
                     </>
                 )}
             </main>
-        </div>
+        </>
     );
 }
 

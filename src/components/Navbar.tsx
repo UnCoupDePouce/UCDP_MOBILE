@@ -37,11 +37,10 @@ export function NavBar() {
                         ? item.icon
                         : `${item.icon}-outline`) as unknown as "home"
                     }
-                    className={`transition-all duration-300 ${
-                      isActive
+                    className={`transition-all duration-300 ${isActive
                         ? "text-black "
                         : "text-gray-400  group-hover:text-black hover:translate-y-0.5 transition-all"
-                    }`}
+                      }`}
                     style={{
                       fontSize: item.name === "Créer" ? "28px" : "24px",
                     }}
@@ -49,9 +48,8 @@ export function NavBar() {
                 </div>
 
                 <span
-                  className={`text-[9px] font-black uppercase tracking-widest mt-1 transition-all duration-300 md:hidden ${
-                    isActive ? "text-black  opacity-100" : "opacity-0 h-0"
-                  }`}
+                  className={`text-[9px] font-black uppercase tracking-widest mt-1 transition-all duration-300 md:hidden ${isActive ? "text-black  opacity-100" : "opacity-0 h-0"
+                    }`}
                 >
                   {isActive ? item.name : ""}
                 </span>

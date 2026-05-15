@@ -10,9 +10,9 @@ export function HomeHeader() {
   const goToProfile = () => navigate("/user");
 
   return (
-    <header className="pt-6 mb-6 flex flex-col gap-8">
+    <header className="flex flex-col gap-8">
       <div className="flex justify-end gap-2">
-        <button className="size-10 bg-white flex items-center justify-center shadow-sm active:translate-y-0.5 transition-all hover:cursor-pointer">
+        <button className="size-10 bg-white rounded-full flex items-center justify-center shadow-sm active:translate-y-0.5 transition-all hover:cursor-pointer">
           <IonIcon name="notifications-outline" className="text-xl text-black" />
         </button>
 
@@ -24,11 +24,11 @@ export function HomeHeader() {
         </button>
       </div>
 
-      <div className="flex flex-col">
-        <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">
+      <div className="flex flex-col mb-6">
+        <span className="mb-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
           Bonjour
         </span>
-        <h1 className="text-[#1A1A1A] font-[900] text-4xl uppercase leading-[0.85] tracking-tighter">
+        <h1 className="text-[#1A1A1A] font-black text-4xl uppercase leading-[0.85] tracking-tighter">
           {user?.prenom}, <br />
           {user?.role === "CLIENT" ? "QUE CRÉONS-NOUS" : "QUE RÉPARONS-NOUS"} <br />
             <span className="flex items-end gap-2">

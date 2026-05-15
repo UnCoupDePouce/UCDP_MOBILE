@@ -21,18 +21,18 @@ export function Header({ title, showButton, className }: HeaderProps) {
   console.log("Path de retour :", prevPath);
 
   useEffect(() => {
-    const handleScroll = () => setIsSticky(window.scrollY > 10);
+    const handleScroll = () => setIsSticky(window.scrollY > 5);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <header
-      className={`sticky top-0 z-[100] w-full px-6 transition-all duration-300
+      className={`sticky top-0 z-100 w-full transition-all duration-300
             ${
               isSticky
-                ? "backdrop-blur-md border-gray-100 pt-14 pb-4"
-                : "border-transparent pt-14 pb-6"
+                ? "bg-white border-gray-100 pt-8 pb-4"
+                : "border-transparent pb-6 pt-8"
             } ${className ?? ""}`}
     >
       <div className="flex items-center gap-4 h-10">
@@ -45,7 +45,7 @@ export function Header({ title, showButton, className }: HeaderProps) {
           </NavLink>
         )}
 
-        <h1 className="text-[#1A1A1A] font-[900] text-4xl uppercase leading-[0.85] tracking-tighter">
+        <h1 className="text-[#1A1A1A] font-black text-4xl uppercase leading-[0.85] tracking-tighter">
           {title}
         </h1>
       </div>
