@@ -31,13 +31,6 @@ export default function MissionDetail() {
                 }),
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
-                alert("Félicitations ! Votre candidature a été transmise.");
-            } else {
-                alert(data.message || "Erreur lors de la postulation");
-            }
         } catch (error) {
             console.error(error);
             alert("Impossible de joindre le serveur.");
