@@ -15,6 +15,7 @@ import MissionSearchPage from "../pages/Search/MissionSearch.tsx";
 import AddMissionPage from "../pages/Mission/AddMission.tsx";
 import Candidate from "../pages/Candidate/Candidate.tsx";
 import DetailProfile from "../pages/Profile/DetailProfile.tsx";
+import SplashScreen from "../pages/SplashScreen/SplashScreen.tsx";
 
 function ProtectedRoutes() {
     const [token, setToken] = useState(localStorage.getItem("hasToken"));
@@ -44,6 +45,15 @@ export default function AppRouter() {
     const location = useLocation();
     const [showBottomBar, setShowBottomBar] = useState(true);
 
+    const [isSplashVisible, setIsSplashVisible] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsSplashVisible(false);
+        }, 2000); // 2 secondes
+        return () => clearTimeout(timer);
+    }, []);
+
     useEffect(() => {
         const path = location.pathname;
 
@@ -63,6 +73,10 @@ export default function AppRouter() {
         window.scrollTo(0, 0);
 
     }, [location.pathname]);
+
+    if (isSplashVisible) {
+        return <SplashScreen/>;
+    }
 
     return (
         <>
