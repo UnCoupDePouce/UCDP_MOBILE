@@ -1,110 +1,130 @@
-import { useHome } from "./useHome.ts";
-import ProjectCard from "../../components/ProjectCard.tsx";
-import { HomeHeader } from "../../components/HomeHeader.tsx";
-import { useFetch } from "../../hooks/useFetch.ts";
-import { userService } from "../../api/services/userService.ts";
-import IonIcon from "@reacticons/ionicons";
+import HomeHeader from "../../components/Header/HomeHeader.tsx";
+import {useEffect, useState} from "react";
+import SkeletonHomePage from "../../components/Skeleton/SkeletonHomePage.tsx";
+import {Link, useNavigate} from "react-router";
+import {MissionService} from "../../service/mission.service.ts";
+import type {Mission} from "../../model/mission.ts";
 
-export default function Home() {
-  const { missions, loading, goToMissions, goToMissionDetail } = useHome();
-  const id = localStorage.getItem("user_id");
-  const { data: user } = useFetch(() => userService.getById(id || ""), [id]);
+export default function HomePage() {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const role = localStorage.getItem("role");
+    const name = localStorage.getItem("name");
 
-  const categories = [
-    { name: "Plomberie", icon: "water-outline" },
-    { name: "Électricité", icon: "flash-outline" },
-    { name: "Peinture", icon: "brush-outline" },
-    { name: "Maçonnerie", icon: "construct-outline" },
-    { name: "Plomberie", icon: "water-outline" },
-    { name: "Électricité", icon: "flash-outline" },
-    { name: "Peinture", icon: "brush-outline" },
-    { name: "Maçonnerie", icon: "construct-outline" },
-    { name: "Plomberie", icon: "water-outline" },
-    { name: "Électricité", icon: "flash-outline" },
-    { name: "Peinture", icon: "brush-outline" },
-    { name: "Maçonnerie", icon: "construct-outline" },
-  ];
+    const [missions, setMissions] = useState<Mission[]>([]);
 
-  return (
-    <div className="px-4 py-4 mb-12">
-      <HomeHeader />
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setLoading(true);
 
-      <div className="flex items-center gap-1 mb-6">
-        <IonIcon name="map" className="text-orange-500 text-sm" />
-        <span className="text-[11px] font-bold text-gray-900 uppercase">{user?.ville}</span>
-      </div>
+        MissionService.getAll()
+            .then((data) => {
+                console.log("Mission chargée :", data);
+                setMissions(data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error("Erreur lors du chargement de la mission :", err);
+                setLoading(false);
+            });
+    }, []);
 
-      <div className="relative mb-6">
-        <div className="absolute inset-y-0 left-4 flex items-center">
-          <IonIcon name="search-outline" className="text-xl text-gray-400" />
-        </div>
-        <input
-          type="text"
-          placeholder="Fuite, peinture, dépannage..."
-          className="w-full bg-white shadow-sm border border-gray-50 rounded-full py-3 pl-12 pr-14 text-sm font-medium focus:outline-none"
-        />
-      </div>
+    const handleMissionClick = (mission: Mission) => {
+        navigate(`/mission/${mission.id_offre}`, {
+            state: {from: "/", name: mission?.utilisateur?.prenom + mission?.utilisateur?.nom}
+        });
+    };
 
-      <section className="mb-10">
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-orange-500 font-black text-xs">01</span>
-          <h2 className="font-black uppercase text-xs tracking-widest text-gray-400">Par métier</h2>
-        </div>
-        <div className="grid grid-cols-4 gap-3">
-          {categories.map((cat) => (
-            <div key={cat.name} className="bg-white p-3 flex flex-col items-center gap-2 shadow-sm border border-gray-50">
-              <IonIcon name={cat.icon as any} className="text-orange-500 text-xl" />
-              <span className="text-[9px] font-black uppercase text-center leading-tight">{cat.name}</span>
+    return (
+        <>
+            <div className="flex flex-col px-4 py-8 mb-20">
+                <HomeHeader/>
+                {loading ? (
+                    <>
+                        <SkeletonHomePage/>
+                    </>
+                ) : (
+                    <div>
+                        <div className="flex flex-col gap-12">
+
+                            <div className="flex flex-col gap-2 w-3/4">
+                                <h1 className="font-black text-3xl uppercase leading-tight">
+                                    <span className="text-orange-500">{name}</span>, <br/>
+
+                                    {role === "CLIENT"
+                                        ? "QUE CRÉONS-NOUS"
+                                        : "QUE RÉPARONS-NOUS"}{" "}
+                                    <br/>
+                                    AUJOURD'HUI ?
+                                </h1>
+                            </div>
+
+                            <div className="flex flex-col gap-4">
+                                <div className="text-sm text-gray-600 flex justify-between">
+                                    <span>Missions à proximité</span>
+                                    <Link to="/search" className="link link-primary">Voir tout</Link>
+                                </div>
+                                {missions.length === 0 ? (
+                                    <div
+                                        className="flex flex-col items-center justify-center p-8 bg-base-200 rounded-md text-center border border-dashed border-gray-300 dark:border-zinc-700">
+                                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            Aucune mission n'est disponible pour le moment.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {missions.slice(0, 10).map((mission) => (
+                                            <div
+                                                key={mission.id_offre}
+                                                onClick={() => handleMissionClick(mission)}
+
+                                                className="flex flex-col gap-2 bg-base-200 p-2 pb-6 rounded-sm cursor-pointer transition-all active:scale-[0.98] hover:bg-base-300"
+                                            >
+                                            
+                                            <span className="font-medium text-[11px] text-gray-400 dark:text-gray-500">
+                Posté le {
+                                                mission?.date_offre
+                                                    ? new Date(mission.date_offre).toLocaleDateString("fr-FR", {
+                                                        day: "numeric",
+                                                        month: "short",
+                                                        year: "numeric"
+                                                    })
+                                                    : "Date inconnue"
+                                            }
+            </span>
+                                                {mission.image && mission.image.length > 0 ? (
+                                                    <img
+                                                        src={mission.image[0]}
+                                                        alt={mission.titre || "Aperçu de la mission"}
+                                                        loading="lazy"
+                                                        className="h-32 w-full rounded-md object-cover"
+                                                    />
+                                                ) : (
+                                                    <img
+                                                        src="src/assets/generic_image.jpg"
+                                                        alt="generic image"
+                                                        loading="lazy"
+                                                        className="h-32 w-full rounded-md object-cover"
+                                                    />
+                                                )}
+
+                                                <p className="font-medium text-sm mt-1">
+                                                    {mission?.utilisateur?.prenom} {mission?.utilisateur?.nom}
+                                                </p>
+
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                    {mission?.metier?.nom || "Métier non spécifié"} · {mission?.localisation}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                        </div>
+                    </div>
+                )}
             </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="flex flex-col gap-y-2 mb-10">
-        <div className="flex items-center gap-1 mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-orange-500 font-black text-xs">02</span>
-            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-              Missions à proximité
-            </h2>
-          </div>
-          <button onClick={goToMissions} className="text-[11px] text-gray-400 underline ml-auto">Voir tout</button>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {loading ? (
-            [1, 2, 3, 4].map((n) => (
-              <div
-                key={n}
-                className="skeleton w-full h-44 bg-gray-100"
-              />
-            ))
-          ) : missions && missions.length > 0 ? (
-            missions
-              .slice(0, 4)
-              .map((m) => (
-                <ProjectCard
-                  key={m.id_offre}
-                  title={m.titre}
-                  category={m.metier?.nom || "Mission générale"}
-                  date={new Date(m.date_offre).toLocaleDateString()}
-                  image={null}
-                  infoLeft={m.localisation}
-                  infoRight={`${m.utilisateur.prenom} ${m.utilisateur.nom}`}
-                  isAccepted={m.is_accepted}
-                  onClick={() => goToMissionDetail(m.id_offre)}
-                />
-              ))
-          ) : (
-            <div className="col-span-full py-10 text-center opacity-40">
-              <p className="text-[10px] font-black uppercase tracking-widest text-neutral">
-                Aucune mission disponible
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
-    </div>
-
-  );
+        </>
+    )
 }

@@ -1,138 +1,184 @@
-import IonIcon from "@reacticons/ionicons";
-import InfoRow from "../../components/profile/InfoRow.tsx";
-import Loading from "../../components/Loading.tsx";
-import { Header } from "../../components/headerPage/Header.tsx";
-import { useProfile } from "./useProfile.ts";
+import {
+    Briefcase,
+    Calendar,
+    FileCheck,
+    FileText,
+    LogOut,
+    Mail,
+    MapPin,
+    Settings,
+    ShieldCheck,
+    User,
+} from "lucide-react";
+import {useLocation, useNavigate} from "react-router";
+import Header from "../../components/Header/Header.tsx";
+import Layout from "../../Layout/Layout.tsx";
+import {useEffect, useState} from "react";
+import type {Utilisateur} from "../../model/user.ts";
+import {UserService} from "../../service/user.service.ts";
 
-export default function Profile() {
-  const {
-    user,
-    loading,
-    error,
-    id_user,
-    isProMode,
-    displayName,
-    initials,
-    handleLogout,
-    clearUser,
-    navigate,
-  } = useProfile();
+export default function ProfilePage() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const role = localStorage.getItem("role");
+    const id = localStorage.getItem("user_id");
+    const [loading, setLoading] = useState(true);
 
-  if (loading) return <Loading />;
+    const [user, setUser] = useState<Utilisateur>();
 
-  if (error || !id_user) {
+    useEffect(() => {
+        if (!id) return
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setLoading(true);
+
+        UserService.getById(id)
+            .then((data) => {
+                console.log("Utilisateur chargée :", data);
+                setUser(data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error("Erreur lors du chargement de l'utilisateur :", err);
+                setLoading(false);
+            });
+    }, []);
+
+    const handleDeconnexion = () => {
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("hasToken");
+        localStorage.removeItem("name");
+        localStorage.removeItem("role");
+        navigate("/login");
+    }
+
+
     return (
-      <div className="min-h-screen flex items-center justify-center p-10">
-        <div className="text-center space-y-6 max-w-xs">
-          <div className="size-20 bg-red-50 rounded-full flex items-center justify-center mx-auto">
-            <IonIcon name="alert-circle-outline" className="text-4xl text-red-500" />
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-lg font-bold text-neutral-900">Session expirée</h3>
-            <p className="text-sm text-neutral-500 leading-relaxed">
-              Pour des raisons de sécurité, votre session a pris fin.
-            </p>
-          </div>
-          <button
-            onClick={clearUser}
-            className="w-full py-4 bg-black text-white text-[11px] font-bold uppercase tracking-widest rounded-2xl transition active:scale-95"
-          >
-            Se reconnecter
-          </button>
-        </div>
-      </div>
-    );
-  }
+        <>
+            <Header name={"Profil"}/>
+            <Layout>
+                <div>
+                    <div className="flex flex-col gap-12">
+                        {loading ? (
+                            <>
+                            </>
+                        ) : (
+                            <div className="card p-6">
+                                <div className="flex flex-col items-center text-center pb-12">
+                                    <h1 className="text-xl font-black uppercase tracking-tighter">{user?.prenom?.toUpperCase()} {user?.nom?.toUpperCase()}</h1>
+                                    <div className="flex items-center gap-1.5 mt-1">
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                        {role}
+                                    </span>
+                                        <ShieldCheck size={14} className="text-indigo-500"/>
+                                    </div>
+                                </div>
 
-  return (
-    <>
-      <Header title="Profil" showButton={"null"} />
+                                <hr className="my-5 border-gray-100 dark:border-gray-800"/>
 
-      <section className="flex flex-col items-center mb-12">
-        <div className="relative group">
-          <div className="size-28 rounded-[38px] bg-gradient-to-br from-neutral-100 to-neutral-200 border-4 border-white shadow-xl flex items-center justify-center text-3xl font-bold text-neutral-800 transition-transform group-hover:scale-105 duration-500">
-            {initials}
-          </div>
-        </div>
+                                <div className="space-y-3 text-sm">
+                                    {role === "PRESTATAIRE" && (
+                                        <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                                            <Briefcase size={16} className="text-gray-400"/>
+                                            <span>{user?.raison_sociale}</span>
+                                        </div>
+                                    )}
 
-        <div className="text-center mt-6">
-          <h2 className="text-2xl font-bold text-neutral-900 tracking-tight">
-            {displayName}
-          </h2>
-          <div className="mt-1.5 inline-flex items-center px-3 py-1 bg-white border border-neutral-200 rounded-full">
-            <span className="size-1.5 rounded-full bg-indigo-500 animate-pulse mr-2" />
-            <span className="text-[10px] font-bold text-neutral-600 uppercase tracking-widest">
-              {isProMode ? user?.raison_sociale : "Compte Client"}
-            </span>
-          </div>
-        </div>
-      </section>
+                                    <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                                        <Mail size={16} className="text-gray-400"/>
+                                        <span>{user?.mail}</span>
+                                    </div>
+                                    <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                                        <MapPin size={16} className="text-gray-400"/>
+                                        <span>{user?.ville}, France</span>
+                                    </div>
+                                    <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                                        <Calendar size={16} className="text-gray-400"/>
+                                        <span>Membre depuis {user?.date_creation ?
+                                            new Intl.DateTimeFormat('fr-FR', {
+                                                month: 'long',
+                                                year: 'numeric'
+                                            }).format(new Date(user.date_creation))
+                                            : "..."
+                                        }</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        <div className="flex flex-col gap-2">
+                            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 px-2">
+                                Réglages du compte
+                            </h2>
 
-      <div className="space-y-8 px-4 py-4 mb-20">
-        <section>
-          <h3 className="px-2 mb-3 text-[11px] font-bold text-neutral-400 uppercase tracking-[0.15em]">
-            Contact & Coordonnées
-          </h3>
-          <div className="bg-white rounded-[28px] p-2 shadow-sm border border-neutral-100 overflow-hidden">
-            <InfoRow icon="mail-outline" label="E-mail" value={user?.mail} />
-            <InfoRow icon="call-outline" label="Téléphone" value={user?.telephone.toString()} />
-            <InfoRow
-              icon="location-outline"
-              label="Adresse"
-              value={`${user?.ville}, ${user?.code_postal}`}
-            />
-            {isProMode && (
-              <InfoRow icon="business-outline" label="Entreprise" value={user?.raison_sociale} />
-            )}
-          </div>
-        </section>
+                            <div
+                                className="bg-white dark:bg-[#1d232a] rounded-2xl shadow-md border border-gray-100 dark:border-gray-800 overflow-hidden">
+                                <button
+                                    disabled={true}
+                                    className="w-full flex items-center justify-between p-4 text-left text-sm font-semibold transition-colors
+                                    bg-transparent text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800/40 disabled:bg-gray-100 dark:disabled:bg-neutral-800
+                                    disabled:text-gray-400 dark:disabled:text-gray-500 disabled:cursor-not-allowed"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <User size={18} className="text-indigo-500 group-disabled:text-gray-400"/>
+                                        <span>Modifier mes informations</span>
+                                    </div>
+                                    <span className="text-gray-400">→</span>
+                                </button>
 
-        <section>
-          <h3 className="px-2 mb-3 text-[11px] font-bold text-neutral-400 uppercase tracking-[0.15em]">
-            Assistance & Légal
-          </h3>
-          <div className="bg-white rounded-[28px] p-2 shadow-sm border border-neutral-100">
-            <InfoRow
-              icon="shield-checkmark-outline"
-              label="Confidentialité"
-              value="Gérer mes données"
-              onClick={() => navigate("/legal/rgpd")}
-            />
-            <InfoRow
-              icon="document-text-outline"
-              label="Conditions"
-              value="CGU / CGV"
-              onClick={() => navigate("/legal/terms")}
-            />
-            <div className="flex items-center justify-between p-4 px-5">
-              <div className="flex items-center gap-4">
-                <div className="size-10 bg-neutral-50 rounded-xl flex items-center justify-center text-neutral-400">
-                  <IonIcon name="information-circle-outline" className="text-xl" />
+                                <hr className="border-gray-100 dark:border-gray-800"/>
+
+                                <button
+                                    onClick={() => navigate("/settings", {state: {from: location.pathname}})}
+                                    className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors text-left text-sm font-semibold">
+                                    <div className="flex items-center gap-3">
+                                        <Settings size={18} className="text-purple-500"/>
+                                        <span>Paramètres de l'application</span>
+                                    </div>
+                                    <span className="text-gray-400">→</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 px-2">
+                                Documents légaux
+                            </h2>
+
+                            <div
+                                className="bg-white dark:bg-[#1d232a] rounded-2xl shadow-md border border-gray-100 dark:border-gray-800 overflow-hidden">
+                                <button
+                                    onClick={() => navigate("/legal/terms", {state: {from: location.pathname}})}
+                                    className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors text-left text-sm font-semibold">
+                                    <div className="flex items-center gap-3">
+                                        <FileText size={18} className="text-amber-500"/>
+                                        <span>Conditions Générales de Vente (CGV)</span>
+                                    </div>
+                                    <span className="text-gray-400">→</span>
+                                </button>
+
+                                <hr className="border-gray-100 dark:border-gray-800"/>
+
+                                <button
+                                    onClick={() => navigate("/legal/rgpd", {state: {from: location.pathname}})}
+                                    className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors text-left text-sm font-semibold">
+                                    <div className="flex items-center gap-3">
+                                        <FileCheck size={18} className="text-emerald-500"/>
+                                        <span>Politique de confidentialité (RGPD)</span>
+                                    </div>
+                                    <span className="text-gray-400">→</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={handleDeconnexion}
+                            className="btn btn-soft btn-error w-full h-12 rounded-xl font-bold uppercase text-xs tracking-wide transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <LogOut size={16}/>
+                            <span>Se déconnecter</span>
+                        </button>
+
+                    </div>
                 </div>
-                <span className="text-[13px] font-semibold text-neutral-800">Version</span>
-              </div>
-              <span className="text-[11px] font-bold text-neutral-400 bg-neutral-100 px-2 py-1 rounded-md">
-                V 1.0.0
-              </span>
-            </div>
-          </div>
-        </section>
-
-        <button
-          onClick={handleLogout}
-          className="group flex items-center justify-between w-full p-5 bg-white border border-red-100 rounded-[28px] transition-all active:scale-[0.98] hover:bg-red-50"
-        >
-          <div className="flex items-center gap-4">
-            <div className="size-10 bg-red-50 group-hover:bg-red-100 rounded-xl flex items-center justify-center text-red-500 transition-colors">
-              <IonIcon name="log-out-outline" className="text-xl" />
-            </div>
-            <span className="text-[13px] font-bold text-red-600 uppercase tracking-widest">
-              Déconnexion
-            </span>
-          </div>
-          <IonIcon name="chevron-forward-outline" className="text-red-300" />
-        </button>
-      </div>
-    </>
-  );
+            </Layout>
+        </>
+    )
 }

@@ -1,15 +1,9 @@
-import { Outlet } from "react-router";
-import { NavBar } from "../components/Navbar";
-import { useMain } from "../useMain";
+import * as React from "react";
 
-export default function Layout() {
-    const { isExcluded } = useMain();
+export default function Layout({children}: { children: React.ReactNode }) {
     return (
-        <main className="min-h-screen">
-            {!isExcluded && <NavBar />}
-            <div className="max-w-7xl h-full lg:pl-32">
-                <Outlet />
-            </div>
+        <main className="flex flex-col px-4 py-8 my-20">
+            {children}
         </main>
     )
 }
