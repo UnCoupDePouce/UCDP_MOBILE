@@ -2,6 +2,7 @@ import {BookCheck, Home, MessageCircle, Plus, Search, User} from "lucide-react";
 import {useEffect, useState} from "react";
 import {motion} from "framer-motion";
 import {useLocation, useNavigate} from "react-router";
+import {useUnreadMessages} from "../provider/UnreadMessageProvider.tsx";
 
 export function BottomBar() {
     const navigate = useNavigate();
@@ -9,6 +10,7 @@ export function BottomBar() {
 
     const [active, setActive] = useState("home");
     const [userRole, setUserRole] = useState<string | null>(null);
+    const {unreadCount} = useUnreadMessages();
 
     useEffect(() => {
         const role = localStorage.getItem("role");
@@ -84,6 +86,11 @@ export function BottomBar() {
                             <span className="relative z-10 mix-blend-exclusion">
                                 <Icon size={22} strokeWidth={isActive ? 2.5 : 2}/>
                             </span>
+                            {item.id === "chat" && unreadCount > 0 && (
+                                <span className="absolute top-0.5 right-0.5 z-20 min-w-[16px] h-4 bg-orange-500 text-white text-[9px] font-bold flex items-center justify-center rounded-full px-0.5 pointer-events-none">
+                                    {unreadCount > 99 ? "99+" : unreadCount}
+                                </span>
+                            )}
                             {isActive && (
                                 <motion.span
                                     layoutId="liquid-dot"

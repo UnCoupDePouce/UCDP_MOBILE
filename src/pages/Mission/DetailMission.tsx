@@ -66,7 +66,15 @@ export default function DetailMissionPage() {
         CandidateService.apply(id, idClientProprietaire)
             .then((response) => {
                 console.log("Candidature envoyée avec succès !", response);
-                navigate("/");
+                navigate(`/chat/${idClientProprietaire}`, {
+                    state: {
+                        contact: {
+                            id: idClientProprietaire,
+                            name: `${mission?.utilisateur?.prenom || ""} ${mission?.utilisateur?.nom || ""}`.trim(),
+                        },
+                        from: `/mission/${id}`,
+                    },
+                });
             })
             .catch((err) => {
                 console.error("Erreur lors de la postulation :", err);
