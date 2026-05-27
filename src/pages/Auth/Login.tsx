@@ -18,7 +18,6 @@ export default function LoginPage() {
     const timer = setTimeout(() => {
       fetchPromise
         .then((data) => {
-          console.log("Connexion :", data);
           localStorage.setItem("hasToken", data.token);
           localStorage.setItem("user_id", data.user.id_utilisateur);
           localStorage.setItem("name", data.user.prenom);

@@ -33,7 +33,6 @@ export default function ProfilePage() {
 
     UserService.getById(id)
       .then((data) => {
-        console.log("Utilisateur chargée :", data);
         setUser(data);
         setLoading(false);
       })

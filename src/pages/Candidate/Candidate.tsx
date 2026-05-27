@@ -19,7 +19,6 @@ export default function Candidate() {
     const timer = setTimeout(() => {
       fetchPromise
         .then((data) => {
-          console.log("Données chargées: ", data);
           setCandidates(data);
           setLoading(false);
         })

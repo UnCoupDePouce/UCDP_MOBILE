@@ -21,7 +21,6 @@ export default function DetailProfile() {
     const timer = setTimeout(() => {
       fetchPromise
         .then((data) => {
-          console.log("Utilisateur chargé :", data);
           setUser(data);
           setLoading(false);
         })
