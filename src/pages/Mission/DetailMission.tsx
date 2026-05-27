@@ -28,7 +28,6 @@ export default function DetailMissionPage() {
     const timer = setTimeout(() => {
       fetchMission
         .then((data) => {
-          console.log("Mission chargée :", data);
           setMission(data);
           setLoading(false);
         })

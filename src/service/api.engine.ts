@@ -10,7 +10,10 @@ export const getAuthHeaders = () => ({
   Authorization: `Bearer ${localStorage.getItem("hasToken")}`,
 });
 
-const injectParams = (url: string, params?: Record<string, unknown>): string => {
+const injectParams = (
+  url: string,
+  params?: Record<string, unknown>,
+): string => {
   if (!params) return url;
   let finalUrl = url;
   Object.keys(params).forEach((key) => {

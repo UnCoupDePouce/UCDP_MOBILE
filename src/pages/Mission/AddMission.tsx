@@ -23,7 +23,6 @@ export default function AddMissionPage() {
   useEffect(() => {
     MetierService.getAll()
       .then((data) => {
-        console.log("Mission chargée :", data);
         setProfessions(data);
       })
       .catch((err) => {

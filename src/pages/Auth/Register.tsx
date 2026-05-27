@@ -48,7 +48,6 @@ export default function RegisterPage() {
       role: roleBDD,
     })
       .then((data) => {
-        console.log("Inscription réussie :", data);
         localStorage.setItem("hasToken", data.token);
         localStorage.setItem("user_id", data.user.id_utilisateur);
         localStorage.setItem("name", data.user.prenom);

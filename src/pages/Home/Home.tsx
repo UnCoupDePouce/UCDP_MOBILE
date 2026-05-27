@@ -19,7 +19,6 @@ export default function HomePage() {
 
     MissionService.getAll()
       .then((data) => {
-        console.log("Mission chargée :", data);
         setMissions(data);
         setLoading(false);
       })
@@ -102,12 +101,17 @@ export default function HomePage() {
                             className="h-32 w-full rounded-md object-cover"
                           />
                         ) : (
-                          <img
-                            src="src/assets/generic_image.jpg"
-                            alt="generic image"
-                            loading="lazy"
-                            className="h-32 w-full rounded-md object-cover"
-                          />
+                            <img
+                                src={`src/assets/generic_image_${
+                                    ([...mission.id_offre].reduce(
+                                        (acc, char) => acc + char.charCodeAt(0),
+                                        0
+                                    ) % 4) + 1
+                                }.webp`}
+                                alt="generic image"
+                                loading="lazy"
+                                className="h-32 w-full rounded-md object-cover"
+                            />
                         )}
                         <p className="font-medium text-sm mt-1">
                           {mission?.utilisateur?.prenom}{" "}
