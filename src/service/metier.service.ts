@@ -1,8 +1,8 @@
-import {request} from "./api.engine";
-import type {Metier} from "../model/metier.ts";
+import { request } from "./api.engine";
+import type { Metier } from "../model/metier.ts";
 
 export const MetierService = {
-    getAll: (): Promise<Metier[]> => {
-        return request<Metier[]>("GET", "/metier");
-    },
+  getAll: (): Promise<Metier[]> => {
+    return request<Metier[]>("GET", "/metier");
+  },
 };

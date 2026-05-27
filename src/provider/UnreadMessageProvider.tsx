@@ -1,70 +1,69 @@
 import * as React from "react";
-import {createContext, useContext, useEffect, useRef, useState} from "react";
-import {SocketService} from "../service/socket.service.ts";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { SocketService } from "../service/socket.service.ts";
 
 interface UnreadMessagesContextType {
-    unreadCount: number;
-    resetUnread: () => void;
+  unreadCount: number;
+  resetUnread: () => void;
 }
 
 const UnreadMessagesContext = createContext<UnreadMessagesContextType>({
-    unreadCount: 0,
-    resetUnread: () => {
-    },
+  unreadCount: 0,
+  resetUnread: () => {},
 });
 
 export function UnreadMessagesProvider({
-                                           children,
-                                       }: {
-    children: React.ReactNode;
+  children,
+}: {
+  children: React.ReactNode;
 }) {
-    const [unreadCount, setUnreadCount] = useState(0);
-    const listenerActive = useRef(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const listenerActive = useRef(false);
 
-    const setupListener = () => {
-        const token = localStorage.getItem("hasToken");
-        if (!token || listenerActive.current) return;
+  const setupListener = () => {
+    const token = localStorage.getItem("hasToken");
+    if (!token || listenerActive.current) return;
 
-        const socket = SocketService.getSocket();
+    const socket = SocketService.getSocket();
 
-        const onNewMessage = (msg: { id_destinataire: string }) => {
-            const myId = localStorage.getItem("user_id") ?? "";
-            if (myId && msg.id_destinataire === myId) {
-                setUnreadCount((prev) => prev + 1);
-            }
-        };
-
-        socket.on("new_message", onNewMessage);
-        listenerActive.current = true;
-
-        return () => {
-            socket.off("new_message", onNewMessage);
-            listenerActive.current = false;
-        };
+    const onNewMessage = (msg: { id_destinataire: string }) => {
+      const myId = localStorage.getItem("user_id") ?? "";
+      if (myId && msg.id_destinataire === myId) {
+        setUnreadCount((prev) => prev + 1);
+      }
     };
 
-    useEffect(() => {
-        const cleanup = setupListener();
+    socket.on("new_message", onNewMessage);
+    listenerActive.current = true;
 
-        if (!cleanup) {
-            const interval = setInterval(() => {
-                const result = setupListener();
-                if (result) clearInterval(interval);
-            }, 1000);
+    return () => {
+      socket.off("new_message", onNewMessage);
+      listenerActive.current = false;
+    };
+  };
 
-            return () => clearInterval(interval);
-        }
+  useEffect(() => {
+    const cleanup = setupListener();
 
-        return cleanup;
-    }, []);
+    if (!cleanup) {
+      const interval = setInterval(() => {
+        const result = setupListener();
+        if (result) clearInterval(interval);
+      }, 1000);
 
-    const resetUnread = () => setUnreadCount(0);
+      return () => clearInterval(interval);
+    }
 
-    return (
-        <UnreadMessagesContext.Provider value={{unreadCount, resetUnread}}>
-            {children}
-        </UnreadMessagesContext.Provider>
-    );
+    return cleanup;
+  }, []);
+
+  const resetUnread = () => setUnreadCount(0);
+
+  return (
+    <UnreadMessagesContext.Provider value={{ unreadCount, resetUnread }}>
+      {children}
+    </UnreadMessagesContext.Provider>
+  );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

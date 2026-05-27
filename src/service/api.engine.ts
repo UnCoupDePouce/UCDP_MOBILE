@@ -10,7 +10,7 @@ export const getAuthHeaders = () => ({
   Authorization: `Bearer ${localStorage.getItem("hasToken")}`,
 });
 
-const injectParams = (url: string, params?: Record<string, any>): string => {
+const injectParams = (url: string, params?: Record<string, unknown>): string => {
   if (!params) return url;
   let finalUrl = url;
   Object.keys(params).forEach((key) => {
@@ -28,9 +28,9 @@ export const request = async <TResponse>(
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
   urlPattern: string,
   options?: {
-    pathParams?: Record<string, any>;
-    queryParams?: Record<string, any>;
-    body?: any;
+    pathParams?: Record<string, unknown>;
+    queryParams?: Record<string, unknown>;
+    body?: unknown;
     headers?: Record<string, string>;
   },
 ): Promise<TResponse> => {
