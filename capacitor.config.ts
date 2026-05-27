@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "com.uncoupdepouce.mobile",
-  appName: "UCDP_Mobile",
+  appId: "com.uncoupdepouce.app",
+  appName: "ucp",
   webDir: "dist",
 };
 
