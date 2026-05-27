@@ -107,7 +107,6 @@ export default function HomePage() {
                                                         className="h-32 w-full rounded-md object-cover"
                                                     />
                                                 )}
-
                                                 <p className="font-medium text-sm mt-1">
                                                     {mission?.utilisateur?.prenom} {mission?.utilisateur?.nom}
                                                 </p>

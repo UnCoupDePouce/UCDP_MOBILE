@@ -38,8 +38,7 @@ export default function DetailProfile() {
     return (
         <>
             <HeaderNameArrow
-                name={loading ? "Détail du profil" : `${user?.prenom || ""} ${user?.nom || ""}`.trim()}
-            />
+                name={loading ? "Détail du profil" : `${user?.prenom || ""} ${user?.nom || ""}`.trim()}/>
 
             {loading ? (
                 <div className="animate-pulse space-y-8 p-8 my-20">
