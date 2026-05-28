@@ -119,6 +119,10 @@ export default function MissionSearchPage() {
                             )
                             : "Date inconnue"}
                     </span>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                            {mission?.utilisateur?.prenom}{" "}
+                                            {mission?.utilisateur?.nom}
+                                        </p>
                                         {mission.image && mission.image.length > 0 ? (
                                             <img
                                                 src={mission.image[0]}
@@ -142,7 +146,7 @@ export default function MissionSearchPage() {
                                             />
                                         )}
                                         <p className="font-medium text-sm mt-1">
-                                            {mission?.utilisateur?.prenom} {mission?.utilisateur?.nom}
+                                            {mission?.titre}
                                         </p>
 
                                         <p className="text-xs text-gray-500 dark:text-gray-400">
