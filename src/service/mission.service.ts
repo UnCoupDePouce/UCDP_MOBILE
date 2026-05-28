@@ -6,6 +6,14 @@ export const MissionService = {
     return request<Mission[]>("GET", "/offre");
   },
 
+  search: (research: string): Promise<Mission[]> =>{
+    return request<Mission[]>("POST", "/offre/search", {
+      body: {
+        research: research
+      }
+    })
+  },
+
   getById: (id: string): Promise<Mission> => {
     return request<Mission>("GET", "/offre/:id", {
       pathParams: { id },
