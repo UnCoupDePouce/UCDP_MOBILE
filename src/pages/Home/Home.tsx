@@ -102,7 +102,7 @@ export default function HomePage() {
                           />
                         ) : (
                             <img
-                                src={`/assets/generic_image_${
+                                src={`/generic_image_${
                                     ([...String(mission.id_offre)].reduce(
                                         (acc, char) => acc + char.charCodeAt(0),
                                         0
