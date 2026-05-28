@@ -73,7 +73,7 @@ export default function HomePage() {
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
                     {missions.slice(0, 10).map((mission) => (
                       <div
                         key={mission.id_offre}
